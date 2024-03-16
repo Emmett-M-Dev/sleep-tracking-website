@@ -4,16 +4,35 @@
  //require 'includes/sessionconnection.php';
 require 'process_form.php';
 include 'sleep_data_display.php';
+include 'chartSleepData.php';
 
 
 if (isset($_GET['status']) && $_GET['status'] === 'success') {
   echo "<p>Form submitted successfully!</p>";
 }
-
+//For widget 
 $sleepScore = calculateSleepScore();
 $lastSleepDuration = getLastSleepDuration();
 $wakeTime = getLatestWakeTime();
 $sleepStreak = calculateSleepStreak();
+
+$sleepData = getLatestSleepData();
+////////Code for testing if the getLatestSleepData method works/////
+// echo "Sleep Data Fetched:<br><pre>";
+// print_r($sleepData);
+// echo "</pre>";
+
+// if ($sleepData) {
+//     $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time']);
+    
+//     echo "Calculated Sleep Cycles:<br><pre>";
+//     print_r($sleepCycles);
+//     echo "</pre>";
+// } else {
+//     echo "No sleep data available for the user.";
+// }
+
+
 
 
 ?>
@@ -245,8 +264,13 @@ $sleepStreak = calculateSleepStreak();
 </section>
 
 <section id='section-4' class="scroll-arrow relative flex flex-col text-gray justify-center py-8 px-4 items-center text-center bg-gray-600 text-white">
-<div id="chart"></div>
-<script src="wakeTimesChart.js"></script>
+<!-- <div id="chart"></div>
+<script src="wakeTimesChart.js"></script> -->
+
+
+
+
+
 
 </section>
 
@@ -270,7 +294,7 @@ $sleepStreak = calculateSleepStreak();
     //         }
     //     });
     // });
-
+    let sleepCyclesData = <?php echo json_encode($sleepCycles); ?>;
   
 
 
