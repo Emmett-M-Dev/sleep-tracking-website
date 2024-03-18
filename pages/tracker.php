@@ -17,11 +17,20 @@ $wakeTime = getLatestWakeTime();
 $sleepStreak = calculateSleepStreak();
 
 $sleepData = getLatestSleepData();
-////////Code for testing if the getLatestSleepData method works/////
+
+// Check if sleep data is available and calculate sleep cycles if so
+if ($sleepData) {
+    $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time']);
+} else {
+    // Handle the case when there's no sleep data
+    $sleepData = ['sleep_time' => '00:00:00', 'wake_time' => '00:00:00']; // Default times for the purpose of demonstration
+    $sleepCycles = []; // Empty array
+}
+
+//////Code for testing if the getLatestSleepData method works//////
 // echo "Sleep Data Fetched:<br><pre>";
 // print_r($sleepData);
 // echo "</pre>";
-
 // if ($sleepData) {
 //     $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time']);
     
@@ -52,10 +61,23 @@ $sleepData = getLatestSleepData();
     <!-- Include Chart.js Library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <!-- includeing d3 libary -->
-<script src="https://d3js.org/d3.v6.min.js"></script>
+<!-- <script src="https://d3js.org/d3.v6.min.js"></script> -->
+
+
+
 
 
  <style type="text/css" src="trackerStyles"></style>
+ <style>#sleep-chart-container {
+    width: 100%;
+    height: 500px; /* Adjust height as needed */
+}
+
+#sleepChart {
+    width: 100%;
+    height: 100%;
+}</style>
+
 </head>
 <body class="bg-gray-900 text-white">
 <?php  include 'includes/nav.php'; ?>
@@ -227,7 +249,7 @@ $sleepData = getLatestSleepData();
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Sleep Trend Chart Container -->
         <div class="chart-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
-            <canvas id="sleepChart"></canvas>
+            
         </div>
 
 
@@ -264,8 +286,11 @@ $sleepData = getLatestSleepData();
 </section>
 
 <section id='section-4' class="scroll-arrow relative flex flex-col text-gray justify-center py-8 px-4 items-center text-center bg-gray-600 text-white">
-<!-- <div id="chart"></div>
-<script src="wakeTimesChart.js"></script> -->
+
+<!-- Inside tracker.php -->
+
+<?php  include 'wakeTimesChart.php'; ?>
+
 
 
 
@@ -389,55 +414,24 @@ function updateSleepWidget(sleepData) {
     }
 
     // Make an AJAX call to the PHP script that returns the sleep data as JSON
-    fetch('get_sleep_data.php')
-        .then(response => response.json())
-        .then(sleepData => {
-            updateSleepWidget(sleepData);
-            drawSleepStagesChart(sleepData.estimatedStages);
-        })
-        .catch(error => {
-            console.error('Error fetching sleep data:', error);
-        });
+    
+
+
+       
+
+
+
+
+        
 });
 
-var ctx = document.getElementById('sleepChart').getContext('2d');
-var yLabels = ["REM", "Light", "Deep", "Awake"]
-
-var cfg = {
-  type:'line',
-  data:{
-    datasets: [{
-      label: 'Sleep Data',
-      data: [
-        {x: '0', y: '0'},{x: '1', y: '3'},{x: '4', y: '2'},{x: '5', y: '2'},{x: '7', y: '1'},{x: '8', y: '0'}
-      ],
-      stepped: 'right',
-      clip:5,
-    }]
-  },
-  options:{
-   scales: {
-      y: {
-        min:0,
-        max:3,
-        ticks: {
-          stepSize: 1,
-          callback: function(index) {
-            return yLabels[index];
-          },
-        }
-      }
-    }
-  }
-}
-
-var myChart = new Chart(ctx,cfg);
- 
 
 
 
 
 
     </script>
+ 
+   
     </body>
 </html>

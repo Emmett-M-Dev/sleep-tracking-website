@@ -1,4 +1,5 @@
 <?php
+
 function getLatestSleepData() {
     global $conn;
 
@@ -63,4 +64,7 @@ function calculateSleepStages($sleepTime, $wakeTime) {
     return $sleepCycles;
 }
 
+
+
 ?>
+ 
