@@ -68,15 +68,8 @@ if ($sleepData) {
 
 
  <style type="text/css" src="trackerStyles"></style>
- <style>#sleep-chart-container {
-    width: 100%;
-    height: 500px; /* Adjust height as needed */
-}
-
-#sleepChart {
-    width: 100%;
-    height: 100%;
-}</style>
+ <style>
+</style>
 
 </head>
 <body class="bg-gray-900 text-white">

@@ -55,11 +55,15 @@ const xScale = d3.scaleTime()
                  .domain([sleepTime, wakeTime])
                  .range([margin.left, 960 - margin.right]);
 
-// Define the y-axis scale (band scale)
+// Update the yScale domain to match the data labels
 const yScale = d3.scaleBand()
-                 .domain(['Awake', 'Light Sleep', 'Deep Sleep', 'REM Sleep'])
+                 .domain(['N1', 'N2', 'N3', 'REM']) // Make sure this matches your data
                  .range([margin.top, height - margin.bottom])
                  .padding(0.1);
+
+// Adjust the y-axis accordingly
+svg.select(".y-axis").call(d3.axisLeft(yScale)); // Assuming you have a class "y-axis" for the y-axis group
+
 
 // Append the x-axis
 svg.append('g')
@@ -73,14 +77,68 @@ svg.append('g')
    .selectAll("text")
    .style("fill", function(d) {
        switch (d) {
-           case 'Awake': return 'red';
-           case 'Light Sleep': return '#ADD8E6'; // Light blue
-           case 'Deep Sleep': return 'blue';
-           case 'REM Sleep': return 'darkblue';
+           case 'N1': return 'red';
+           case 'N2': return '#ADD8E6'; // Light blue
+           case 'N3': return 'blue';
+           case 'REM': return 'darkblue';
            default: return 'black';
        }
    });
   
+
+//STEP 2
+// Transform sleep cycles data to a flat array for visualization
+// Transform sleep cycles data to a flat array for visualization
+let currentTime = sleepTime; // Start at the beginning of the sleep time
+
+const stagesData = sleepCycles.flatMap((cycle, index) => {
+  // Reset the currentTime for each cycle
+  currentTime = index === 0 ? sleepTime : d3.timeDay.offset(currentTime, 90 / 1440); // Advance by cycle length in days
+  return Object.entries(cycle).map(([stage, duration]) => {
+    const startTime = new Date(currentTime);
+    const endTime = new Date(currentTime.getTime() + duration * 60000); // duration in ms
+    currentTime = endTime; // Set currentTime to the end of the current stage
+    return { stage, startTime, endTime };
+  });
+});
+
+// Create rectangles for each sleep stage
+svg.selectAll(".sleep-stage")
+   .data(stagesData)
+   .enter()
+   .append("rect")
+   .attr("class", "sleep-stage")
+   .attr("x", d => xScale(d.startTime))
+   .attr("y", d => yScale(d.stage))
+   .attr("width", d => {
+       const width = xScale(d.endTime) - xScale(d.startTime);
+       return width > 0 ? width : 0; // Ensure width is not negative
+   })
+   .attr("height", yScale.bandwidth())
+   .attr("fill", d => {
+       // Updated to match the labels from the data
+       switch (d.stage) {
+           case 'N1': return 'red'; // Awake is assumed to be N1
+           case 'N2': return '#ADD8E6'; // Light blue for Light Sleep
+           case 'N3': return 'blue'; // Blue for Deep Sleep
+           case 'REM': return 'darkblue'; // Dark blue for REM
+           default: return 'black'; // Fallback color
+       }
+   });
+
+
+
+// Add tooltips on hover
+// svg.selectAll(".sleep-stage")
+//    .append("title")
+//    .text(d => `${d.stage}: ${d3.timeFormat("%H:%M")(d.startTime)} - ${d3.timeFormat("%H:%M")(d.endTime)}`);
+
+
+
+
+
+
+
 </script>
 </body>
 </html>
