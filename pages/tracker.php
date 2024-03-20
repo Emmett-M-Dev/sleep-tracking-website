@@ -20,7 +20,7 @@ $sleepData = getLatestSleepData();
 
 // Check if sleep data is available and calculate sleep cycles if so
 if ($sleepData) {
-    $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time']);
+    $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time'],$sleepData['sleep_quality']);
 } else {
     // Handle the case when there's no sleep data
     $sleepData = ['sleep_time' => '00:00:00', 'wake_time' => '00:00:00']; // Default times for the purpose of demonstration

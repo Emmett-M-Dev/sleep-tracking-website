@@ -52,7 +52,7 @@
     
     <script>
    const sleepData = <?php echo json_encode(getLatestSleepData()); ?>;
-    const sleepCycles = <?php echo json_encode(calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time'])); ?>;
+    const sleepCycles = <?php echo json_encode(calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time'], $sleepData['sleep_quality'])); ?>;
 
     // Parsing PHP date into JavaScript Date object
     const sleepStartTime = new Date('1970-01-01T' + sleepData['sleep_time'] + 'Z');
@@ -143,6 +143,7 @@
             },
             plugins: {
                 tooltip: {
+                    
                     callbacks: {
                         title: function(context) {
                             // Display start and end time for each sleep stage segment
@@ -159,6 +160,7 @@
                     mode: 'nearest',
                     intersect: false
                 },
+                
                 legend: {
                     display: false // No legend needed
                 }
