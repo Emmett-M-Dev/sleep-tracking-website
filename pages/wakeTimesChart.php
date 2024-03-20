@@ -10,14 +10,14 @@
 // Fetch the sleep data for the currently logged-in user
 //$sleepData = getLatestSleepData();
 
-if ($sleepData) {
-    $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time']);
-} else {
-    // Handle the case when there's no sleep data for the user
-    // For the sake of the D3 chart, we might set some default or empty values here
-    $sleepData = ['sleep_time' => '00:00:00', 'wake_time' => '00:00:00']; // default times
-    $sleepCycles = []; // empty array
-}
+// if ($sleepData) {
+//     $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time']);
+// } else {
+//     // Handle the case when there's no sleep data for the user
+//     // For the sake of the D3 chart, we might set some default or empty values here
+//     $sleepData = ['sleep_time' => '00:00:00', 'wake_time' => '00:00:00']; // default times
+//     $sleepCycles = []; // empty array
+// }
 ?>
 
 <!DOCTYPE html>
@@ -25,120 +25,147 @@ if ($sleepData) {
 <head>
     <meta charset="UTF-8">
     <title>Sleep Stages Chart</title>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+     /* .chart-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 500px; 
+        background-color: #131862; 
+    }
+    
+    #sleepCycleChart {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); 
+        border-radius: 8px; 
+        max-width: 600px; 
+        width: 100%; 
+    } */
+</style>
 </head>
 <body>
-    <svg id="sleepChart" width="960" height="500"></svg>
+
+    <canvas id="sleepCycleChart"></canvas>
+
     
     <script>
- // Prepare the data
-const sleepData = <?php echo json_encode($sleepData); ?>;
-console.log('sleepData', sleepData);
-const sleepCycles = <?php echo json_encode($sleepCycles); ?>;
-console.log('sleepCycles', sleepCycles);
+   const sleepData = <?php echo json_encode(getLatestSleepData()); ?>;
+    const sleepCycles = <?php echo json_encode(calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time'])); ?>;
 
-// Select the SVG container
-const svg = d3.select('#sleepChart');
-const height = 500; // SVG height
-const margin = {top: 20, right: 20, bottom: 30, left: 70};
+    // Parsing PHP date into JavaScript Date object
+    const sleepStartTime = new Date('1970-01-01T' + sleepData['sleep_time'] + 'Z');
+    const wakeEndTime = new Date('1970-01-01T' + sleepData['wake_time'] + 'Z');
+    if (wakeEndTime <= sleepStartTime) {
+        wakeEndTime.setDate(wakeEndTime.getDate() + 1); // Adjust for crossing midnight
+    }
 
-// Parse the sleep and wake times
-const parseTime = d3.timeParse('%H:%M:%S');
-const sleepTime = parseTime(sleepData['sleep_time']);
-const wakeTime = parseTime(sleepData['wake_time']);
-if (wakeTime < sleepTime) { // Adjust for crossing midnight
-    wakeTime.setDate(wakeTime.getDate() + 1);
-}
+    function transformSleepData(sleepCycles) {
+        let currentTime = sleepStartTime;
+        return sleepCycles.flatMap((cycle, index) => {
+            return Object.entries(cycle).map(([stage, duration]) => {
+                const endTime = new Date(currentTime.getTime() + duration * 60000); // duration in ms
+                const segment = {
+                    x: currentTime,
+                    x2: endTime,
+                    y: stage
+                };
+                currentTime = endTime; // Update currentTime to the end of the current stage
+                return segment;
+            });
+        });
+    }
 
-// Define the x-axis scale (time scale)
-const xScale = d3.scaleTime()
-                 .domain([sleepTime, wakeTime])
-                 .range([margin.left, 960 - margin.right]);
+    // Get canvas context
+    const ctx = document.getElementById('sleepCycleChart').getContext('2d');
 
-// Update the yScale domain to match the data labels
-const yScale = d3.scaleBand()
-                 .domain(['N1', 'N2', 'N3', 'REM']) // Make sure this matches your data
-                 .range([margin.top, height - margin.bottom])
-                 .padding(0.1);
+    // Gradient background
+    const gradient = ctx.createLinearGradient(0, 0, 0, ctx.canvas.height);
+    gradient.addColorStop(0, '#002d72'); // Top gradient color
+    gradient.addColorStop(1, '#81a4f8'); // Bottom gradient color
 
-// Adjust the y-axis accordingly
-svg.select(".y-axis").call(d3.axisLeft(yScale)); // Assuming you have a class "y-axis" for the y-axis group
+    // Transformed sleep data for Chart.js
+    const transformedData = transformSleepData(sleepCycles);
+    const datasets = [
+        {
+            label: 'Sleep Stage',
+            data: transformedData,
+            borderColor: gradient,
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            stepped: true,
+        }
+    ];
 
-
-// Append the x-axis
-svg.append('g')
-   .attr('transform', `translate(0,${height - margin.bottom})`)
-   .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat("%H:%M")).ticks(d3.timeHour.every(1)));
-
-// Append the y-axis
-svg.append('g')
-   .attr('transform', `translate(${margin.left},0)`)
-   .call(d3.axisLeft(yScale))
-   .selectAll("text")
-   .style("fill", function(d) {
-       switch (d) {
-           case 'N1': return 'red';
-           case 'N2': return '#ADD8E6'; // Light blue
-           case 'N3': return 'blue';
-           case 'REM': return 'darkblue';
-           default: return 'black';
-       }
-   });
-  
-
-//STEP 2
-// Transform sleep cycles data to a flat array for visualization
-// Transform sleep cycles data to a flat array for visualization
-let currentTime = sleepTime; // Start at the beginning of the sleep time
-
-const stagesData = sleepCycles.flatMap((cycle, index) => {
-  // Reset the currentTime for each cycle
-  currentTime = index === 0 ? sleepTime : d3.timeDay.offset(currentTime, 90 / 1440); // Advance by cycle length in days
-  return Object.entries(cycle).map(([stage, duration]) => {
-    const startTime = new Date(currentTime);
-    const endTime = new Date(currentTime.getTime() + duration * 60000); // duration in ms
-    currentTime = endTime; // Set currentTime to the end of the current stage
-    return { stage, startTime, endTime };
-  });
-});
-
-// Create rectangles for each sleep stage
-svg.selectAll(".sleep-stage")
-   .data(stagesData)
-   .enter()
-   .append("rect")
-   .attr("class", "sleep-stage")
-   .attr("x", d => xScale(d.startTime))
-   .attr("y", d => yScale(d.stage))
-   .attr("width", d => {
-       const width = xScale(d.endTime) - xScale(d.startTime);
-       return width > 0 ? width : 0; // Ensure width is not negative
-   })
-   .attr("height", yScale.bandwidth())
-   .attr("fill", d => {
-       // Updated to match the labels from the data
-       switch (d.stage) {
-           case 'N1': return 'red'; // Awake is assumed to be N1
-           case 'N2': return '#ADD8E6'; // Light blue for Light Sleep
-           case 'N3': return 'blue'; // Blue for Deep Sleep
-           case 'REM': return 'darkblue'; // Dark blue for REM
-           default: return 'black'; // Fallback color
-       }
-   });
-
-
-
-// Add tooltips on hover
-// svg.selectAll(".sleep-stage")
-//    .append("title")
-//    .text(d => `${d.stage}: ${d3.timeFormat("%H:%M")(d.startTime)} - ${d3.timeFormat("%H:%M")(d.endTime)}`);
-
-
-
-
-
-
-
+    // Initialize the Chart.js chart with transformed sleep data and options
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: datasets
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        parser: 'HH:mm:ss', // The format your time data is in
+                        tooltipFormat: 'HH:mm'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Time of Night',
+                        color: 'white' // Set x-axis title color to white
+                },
+                ticks: {
+                    color: 'white' // Set x-axis ticks color to white
+                }
+                    
+                },
+                y: {
+                    reversed: true, // Reverse the y-axis to show deeper sleep stages at the bottom
+                    type: 'category',
+                    labels: ['N1', 'REM', 'N2', 'N3'], // Ordered as they will appear top to bottom
+                    ticks: {
+                    color: 'white' // Set y-axis ticks color to white
+                }
+                }
+            },
+            elements: {
+                line: {
+                    fill: false,
+                    tension: 0 // No curve, create stepped lines
+                },
+                point: {
+                    radius: 0 // Hide points on the line
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(context) {
+                            // Display start and end time for each sleep stage segment
+                            const segment = context[0].element.$context.raw;
+                            return segment.y + ': ' + segment.x.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) + ' - ' + segment.x2.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                        },
+                        label: function(context) {
+                            // Calculate duration for tooltip
+                            const segment = context.element.$context.raw;
+                            const duration = (segment.x2 - segment.x) / 60000; // Convert ms to minutes
+                            return `Duration: ${duration.toFixed(0)} minutes`;
+                        }
+                    },
+                    mode: 'nearest',
+                    intersect: false
+                },
+                legend: {
+                    display: false // No legend needed
+                }
+            }
+        }
+    });
+    
 </script>
 </body>
 </html>

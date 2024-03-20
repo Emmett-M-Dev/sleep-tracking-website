@@ -67,8 +67,38 @@ if ($sleepData) {
 
 
 
- <style type="text/css" src="trackerStyles"></style>
+ 
  <style>
+    #section-4 {
+  background: linear-gradient(to right, #2b1055, #7597de); /* Adjust gradient colors as needed */
+  padding: 50px 0; /* Add padding to give some space around the canvas */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  color: white; /* Set text color to white for better contrast */
+  
+}
+
+
+.chart-container {
+  position: relative; /* Ensure the position is relative for the container */
+  max-width: 900px; /* Adjust width as needed to fit your layout */
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
+  background-color: rgba(255, 255, 255, 0.1); /* Slight transparency to blend with the background */
+  border-radius: 15px; /* Round corners for a smoother look */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+  color: white;
+}
+
+#sleepCycleChart {
+  background-color: transparent; /* Ensure canvas has a transparent background */
+  box-shadow: none; /* Remove any box-shadow if not desired */
+  color: white;
+}
 </style>
 
 </head>
@@ -281,15 +311,9 @@ if ($sleepData) {
 <section id='section-4' class="scroll-arrow relative flex flex-col text-gray justify-center py-8 px-4 items-center text-center bg-gray-600 text-white">
 
 <!-- Inside tracker.php -->
-
-<?php  include 'wakeTimesChart.php'; ?>
-
-
-
-
-
-
-
+<div class="chart-container">
+        <?php include 'wakeTimesChart.php'; ?>
+    </div>
 </section>
 
 
