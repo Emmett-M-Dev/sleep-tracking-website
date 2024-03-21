@@ -73,9 +73,9 @@ if ($sleepData) {
   background: linear-gradient(to right, #2b1055, #7597de); /* Adjust gradient colors as needed */
   padding: 50px 0; /* Add padding to give some space around the canvas */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  /* justify-content: center; */
+  align-items: flex-start;
+  /* flex-direction: column; */
   text-align: center;
   color: white; /* Set text color to white for better contrast */
   
@@ -87,13 +87,42 @@ if ($sleepData) {
   max-width: 900px; /* Adjust width as needed to fit your layout */
   width: 100%;
   padding: 20px;
+  margin-right: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
   background-color: rgba(255, 255, 255, 0.1); /* Slight transparency to blend with the background */
   border-radius: 15px; /* Round corners for a smoother look */
   border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
   color: white;
 }
+.sleep-info {
+  max-width: 300px; /* Adjust width as necessary */
+  padding: 10px;
+  margin-left: 20px; /* Space between the chart and the info box */
+  border-left: 2px solid #7597de; /* A border to visually separate from the chart */
+  display: Hide; /* Hide by default */
+  background-color: #202020; /* Sets a background color for visibility */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 20px; /* Space between the chart and the info box */
+}
 
+.hidden { display: none; }
+.visible { display: block; }
+
+@media screen and (max-width: 1024px) {
+  /* For smaller screens, you might want to stack the chart and info box */
+  #section-4 .flex {
+    flex-direction: column;
+  }
+
+
+  .chart-container,
+  .sleep-info {
+    margin: 0;
+    max-width: 100%;
+  }
+}
 #sleepCycleChart {
   background-color: transparent; /* Ensure canvas has a transparent background */
   box-shadow: none; /* Remove any box-shadow if not desired */
@@ -308,12 +337,18 @@ if ($sleepData) {
     
 </section>
 
-<section id='section-4' class="scroll-arrow relative flex flex-col text-gray justify-center py-8 px-4 items-center text-center bg-gray-600 text-white">
-
-<!-- Inside tracker.php -->
-<div class="chart-container">
-        <?php include 'wakeTimesChart.php'; ?>
+<section id='section-4' class="relative flex justify-center py-8 px-4 items-start text-center bg-gray-600 text-white">
+  <div class="flex justify-between items-start w-full max-w-6xl"> <!-- Container for chart and info -->
+  
+    <div class="chart-container flex-1"> <!-- Chart container takes half the space -->
+      <?php include 'wakeTimesChart.php'; ?>
     </div>
+    <div id="sleepStageInfo" class="sleep-info hidden flex-1"> <!-- Info container takes the other half -->
+      <h2 id="sleepStageTitle">N1: Light Sleep</h2>
+      <p id="sleepStageDescription">This stage marks the transition from wakefulness into sleep and usually lasts for a short period. It's easy to be awakened from this stage, and if disrupted, one may not feel as if they've slept at all.</p>
+    </div>
+    
+  </div>
 </section>
 
 

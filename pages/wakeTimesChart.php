@@ -60,6 +60,7 @@
     if (wakeEndTime <= sleepStartTime) {
         wakeEndTime.setDate(wakeEndTime.getDate() + 1); // Adjust for crossing midnight
     }
+    
 
     function transformSleepData(sleepCycles) {
         let currentTime = sleepStartTime;
@@ -93,12 +94,32 @@
             data: transformedData,
             borderColor: gradient,
             borderWidth: 2,
-            pointRadius: 0,
-            pointHoverRadius: 0,
+            pointRadius: 5,
+            pointHoverRadius: 10,
+            pointHitRadius: 20,
             stepped: true,
         }
     ];
+    const stageInfo = {
+        N1: {
+        title: "N1: Light Sleep",
+        description: "The N1 stage marks the transition from wakefulness into sleep. It's a light sleep stage from which you can be easily awakened. During N1, the body hasn't fully relaxed, and brain wave activity begins to slow down from its daytime wakefulness patterns.",
+    },
+    N2: {
+        title: "N2: Intermediate Sleep",
+        description: "The N2 stage accounts for the largest portion of the sleep cycle. It acts as a transitional phase into deeper sleep stages. During N2, your heart rate and breathing stabilize at a low rate, body temperature drops, and brain waves show a new pattern distinct from waking states.",
+    },
+    N3: {
+        title: "N3: Deep Sleep",
+        description: "N3, often referred to as deep or slow-wave sleep, is the most restorative sleep stage. It's more difficult to be awakened when in N3, and disorientation or grogginess can occur if sleep is disrupted. During this stage, the body repairs muscles and tissues, stimulates growth and development, boosts immune function, and builds up energy for the next day.",
+    },
+    REM: {
+        title: "REM Sleep",
+        description: "REM (Rapid Eye Movement) sleep is characterized by rapid movement of the eyes, paralysis of the body's muscles, and vivid dreaming. Brain wave activity during REM is similar to wakefulness, making it a unique sleep stage. REM sleep enhances learning, memory, and emotional health.",
+    }
+};
 
+    
     // Initialize the Chart.js chart with transformed sleep data and options
     const chart = new Chart(ctx, {
         type: 'line',
@@ -106,6 +127,23 @@
             datasets: datasets
         },
         options: {
+            onHover: (event, chartElements) => {
+    if (chartElements.length > 0) {
+        const element = chartElements[0];
+        const datasetIndex = element.datasetIndex;
+        const index = element.index;
+        const stage = chart.data.datasets[datasetIndex].data[index].y; // Assuming y contains the stage name
+
+        // Check if the stage has defined info
+        if (stageInfo[stage]) {
+            updateAndDisplayInfo(stageInfo[stage].title, stageInfo[stage].description);
+        } else {
+            hideInfoBox(); // Hide the box if the stage is not recognized
+        }
+    } else {
+        hideInfoBox();
+    }
+},
             scales: {
                 x: {
                     type: 'time',
@@ -167,6 +205,32 @@
             }
         }
     });
+
+    const dataPoint = chart.data.datasets[datasetIndex].data[index];
+// Assuming dataPoint.y contains 'N1', 'REM', etc.
+// if (dataPoint.y === 'N1') {
+//     updateAndDisplayInfo('N1: Light Sleep', 'Description of N1 stage...');
+// }
+   function updateAndDisplayInfo(title, description) {
+    const infoBox = document.getElementById('sleepStageInfo');
+    const titleElement = document.getElementById('sleepStageTitle');
+    const descriptionElement = document.getElementById('sleepStageDescription');
+
+    titleElement.textContent = title;
+    descriptionElement.textContent = description;
+
+    infoBox.classList.remove('hidden');
+    infoBox.classList.add('visible');
+}
+function hideInfoBox() {
+    const infoBox = document.getElementById('sleepStageInfo');
+    if (infoBox) {
+        infoBox.classList.add('hidden'); // Assuming 'hidden' is a CSS class that hides the element
+    }
+}
+
+///// PROGRESS BARS //////
+
     
 </script>
 </body>
