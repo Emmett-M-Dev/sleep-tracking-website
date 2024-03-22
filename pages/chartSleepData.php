@@ -65,15 +65,42 @@ function calculateSleepStages($sleepTime, $wakeTime, $sleepQuality) {
 
         $sleepCycles[] = $stages;
 
+
+        
+
         if ($remainingDuration <= 0) {
             break;
         }
     }
 
-    return $sleepCycles;
+     return $sleepCycles;
+
+
+     
 }
+// this function is for the progress bars.
+function calculateStagePercentages($sleepCycles) {
+    $stageTotals = ['N1' => 0, 'N2' => 0, 'N3' => 0, 'REM' => 0];
 
+    // Sum the durations for each stage
+    foreach ($sleepCycles as $stages) {
+        foreach ($stages as $stage => $duration) {
+            $stageTotals[$stage] += $duration;
+        }
+    }
 
+    // Calculate the total sleep time
+    $totalSleepTime = array_sum($stageTotals);
+
+    // Calculate the percentages for each stage
+    $stagePercentages = [];
+    foreach ($stageTotals as $stage => $duration) {
+        $stagePercentages[$stage] = $duration ? ($duration / $totalSleepTime) * 100 : 0;
+        $stagePercentages[$stage] = round($stagePercentages[$stage]);
+    }
+
+    return $stagePercentages;
+}
 
 ?>
  

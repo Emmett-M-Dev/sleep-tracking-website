@@ -211,25 +211,29 @@
 // if (dataPoint.y === 'N1') {
 //     updateAndDisplayInfo('N1: Light Sleep', 'Description of N1 stage...');
 // }
-   function updateAndDisplayInfo(title, description) {
-    const infoBox = document.getElementById('sleepStageInfo');
-    const titleElement = document.getElementById('sleepStageTitle');
-    const descriptionElement = document.getElementById('sleepStageDescription');
+function updateAndDisplayInfo(title, description) {
+    console.log("updateAndDisplayInfo called with:", title, description);
+  const infoBox = document.getElementById('sleepStageInfo');
+  const titleElement = document.getElementById('sleepStageTitle');
+  const descriptionElement = document.getElementById('sleepStageDescription');
 
-    titleElement.textContent = title;
-    descriptionElement.textContent = description;
+  titleElement.textContent = title;
+  descriptionElement.textContent = description;
 
-    infoBox.classList.remove('hidden');
-    infoBox.classList.add('visible');
+  // Just add 'visible' class to show the info box
+  infoBox.classList.remove('hidden');
+  infoBox.classList.add('visible');
 }
+
 function hideInfoBox() {
-    const infoBox = document.getElementById('sleepStageInfo');
-    if (infoBox) {
-        infoBox.classList.add('hidden'); // Assuming 'hidden' is a CSS class that hides the element
-    }
+    console.log("hideInfoBox called");
+  const infoBox = document.getElementById('sleepStageInfo');
+  // Remove 'visible' class to hide the info box
+  infoBox.classList.remove('visible');
+  infoBox.classList.add('hidden');
 }
 
-///// PROGRESS BARS //////
+
 
     
 </script>

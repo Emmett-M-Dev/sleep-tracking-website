@@ -7,9 +7,9 @@ include 'sleep_data_display.php';
 include 'chartSleepData.php';
 
 
-if (isset($_GET['status']) && $_GET['status'] === 'success') {
-  echo "<p>Form submitted successfully!</p>";
-}
+// if (isset($_GET['status']) && $_GET['status'] === 'success') {
+//   echo "<p>Form submitted successfully!</p>";
+// }
 //For widget 
 $sleepScore = calculateSleepScore();
 $lastSleepDuration = getLastSleepDuration();
@@ -21,6 +21,7 @@ $sleepData = getLatestSleepData();
 // Check if sleep data is available and calculate sleep cycles if so
 if ($sleepData) {
     $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time'],$sleepData['sleep_quality']);
+    $stagePercentages = calculateStagePercentages($sleepCycles);
 } else {
     // Handle the case when there's no sleep data
     $sleepData = ['sleep_time' => '00:00:00', 'wake_time' => '00:00:00']; // Default times for the purpose of demonstration
@@ -69,64 +70,99 @@ if ($sleepData) {
 
  
  <style>
-    #section-4 {
-  background: linear-gradient(to right, #2b1055, #7597de); /* Adjust gradient colors as needed */
-  padding: 50px 0; /* Add padding to give some space around the canvas */
+ #section-4 {
+  background: linear-gradient(to right, #2b1055, #7597de);
+  padding: 50px 0;
   display: flex;
-  /* justify-content: center; */
+  justify-content: center; /* Center the content */
   align-items: flex-start;
-  /* flex-direction: column; */
   text-align: center;
-  color: white; /* Set text color to white for better contrast */
-  
+  color: white;
+  position: relative;
 }
-
 
 .chart-container {
-  position: relative; /* Ensure the position is relative for the container */
-  max-width: 900px; /* Adjust width as needed to fit your layout */
-  width: 100%;
   padding: 20px;
-  margin-right: 20px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
-  background-color: rgba(255, 255, 255, 0.1); /* Slight transparency to blend with the background */
-  border-radius: 15px; /* Round corners for a smoother look */
-  border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
-  color: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  height: 400px;
+  /* Subtract total width of the info box and the margin from 100% to get the chart width */
+  width: calc(100% - 320px - 20px);
+  flex: none; /* Disable flex grow and shrink */
+}
+.sleep-info-container {
+  width: 600px; /* Fixed width of the info box */
+  padding: 20px;
+  margin-left: 300px; /* Maintain 20px distance from the chart */
+  position: relative; /* Position relative to the parent */
+  height: 400px;
 }
 .sleep-info {
-  max-width: 300px; /* Adjust width as necessary */
-  padding: 10px;
+    position: absolute; /* Positioned absolutely relative to its positioned parent */
+  right: 20px; /* 20px from the right edge of the parent container */
+  top: 0; /* Align with the top of the container */
+  width: 300px; /* Fixed width of the info box */
+  max-width: none; /* Override any previous max-width */
+  padding: 20px; /* Padding on all sides */
   margin-left: 20px; /* Space between the chart and the info box */
   border-left: 2px solid #7597de; /* A border to visually separate from the chart */
-  display: Hide; /* Hide by default */
   background-color: #202020; /* Sets a background color for visibility */
-  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-left: 20px; /* Space between the chart and the info box */
+  visibility: hidden; /* Start with info box invisible */
+  opacity: 0; /* Start with info box fully transparent */
+  transition: opacity 0.2s ease-in-out; /* Smooth transition for opacity */
+  z-index: 10; /* Ensure it's above other elements */
 }
 
-.hidden { display: none; }
-.visible { display: block; }
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.2s linear;
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.chart-container:hover + .sleep-info,
+.sleep-info:hover {
+  visibility: visible; /* Make the info box visible on hover */
+  opacity: 1;
+}
+
+.percentage-chart-container {
+  width: 100px;
+  height: 100px;
+  margin: 10px;
+  flex: 0 0 auto; /* Do not grow or shrink */
+}
+
+.percentage-chart-container canvas {
+  width: 100%;
+  height: 100%;
+}
 
 @media screen and (max-width: 1024px) {
-  /* For smaller screens, you might want to stack the chart and info box */
-  #section-4 .flex {
-    flex-direction: column;
-  }
-
-
-  .chart-container,
+    .chart-container,
   .sleep-info {
     margin: 0;
     max-width: 100%;
+    width: auto; /* Allow the box to adjust to the content width */
   }
-}
-#sleepCycleChart {
-  background-color: transparent; /* Ensure canvas has a transparent background */
-  box-shadow: none; /* Remove any box-shadow if not desired */
-  color: white;
+
+  .sleep-info {
+    position: static; /* On smaller screens, make the box flow with the document */
+    margin: 20px 0; /* Add some space above and below */
+    right: auto; /* Remove the absolute positioning offsets */
+    top: auto;
+    width: auto; /* Allow the box to adjust to the content width */
+    visibility: visible; /* Always visible on smaller screens */
+    opacity: 1;
+  }
 }
 </style>
 
@@ -338,17 +374,25 @@ if ($sleepData) {
 </section>
 
 <section id='section-4' class="relative flex justify-center py-8 px-4 items-start text-center bg-gray-600 text-white">
-  <div class="flex justify-between items-start w-full max-w-6xl"> <!-- Container for chart and info -->
+  <div class="flex justify-around items-start w-full max-w-6xl"> <!-- Use justify-around for even spacing -->
   
-    <div class="chart-container flex-1"> <!-- Chart container takes half the space -->
-      <?php include 'wakeTimesChart.php'; ?>
-    </div>
-    <div id="sleepStageInfo" class="sleep-info hidden flex-1"> <!-- Info container takes the other half -->
-      <h2 id="sleepStageTitle">N1: Light Sleep</h2>
-      <p id="sleepStageDescription">This stage marks the transition from wakefulness into sleep and usually lasts for a short period. It's easy to be awakened from this stage, and if disrupted, one may not feel as if they've slept at all.</p>
+    <!-- Progress Bars Container -->
+    <div class="progress-bars-container flex flex-col justify-start mr-12"> <!-- Vertically stacked progress bars -->
+      <?php include 'percentageBars.php'; ?> <!-- Includes the progress bars -->
     </div>
     
-  </div>
+    <!-- Chart Container -->
+    <div class="chart-container flex-1 mr-12"> <!-- Flex container for the chart -->
+      <?php include 'wakeTimesChart.php'; ?>
+    </div>
+
+    <!-- Sleep Stage Information -->
+    <div class="sleep-info-container">
+      <div id="sleepStageInfo" class="sleep-info hidden"> <!-- Hidden by default, shown on hover -->
+        <h2 id="sleepStageTitle">N1: Light Sleep</h2>
+        <p id="sleepStageDescription">This stage marks the transition from wakefulness into sleep and usually lasts for a short period. It's easy to be awakened from this stage, and if disrupted, one may not feel as if they've slept at all.</p>
+      </div>
+    </div>
 </section>
 
 
