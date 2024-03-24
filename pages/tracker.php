@@ -135,10 +135,19 @@ if ($sleepData) {
 }
 
 .percentage-chart-container {
-  width: 100px;
-  height: 100px;
-  margin: 10px;
-  flex: 0 0 auto; /* Do not grow or shrink */
+    width: 100%; /* Adjust the width as desired, or remove if not needed */
+    max-width: 100px; 
+    margin-bottom: 8px; /* Add more space at the bottom of each chart container */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Do not grow or shrink */
+}
+.progress-circles-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* This will center the container itself */
+    justify-content: space-around; /* This will add space between the items */
+    padding: 10px 0; /* This adds padding at the top and bottom of the container */
 }
 
 .percentage-chart-container canvas {

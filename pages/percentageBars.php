@@ -12,6 +12,12 @@ $colors = [
     'N3' => '#f1c40f',
     'REM' => '#2ecc71',
 ];
+$labels = [
+    'N1' => 'Light ',
+    'N2' => 'Intermediate ',
+    'N3' => 'Deep ',
+    'REM' => 'REM ',
+];
 
 
 ?>
@@ -23,7 +29,13 @@ $colors = [
     <title>Progress Circles</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-   
+   .chart-label {
+    color: white; /* Set the text color */
+    text-align: center; /* Center the text below the donut chart */
+    margin-top: 5px; /* Add some space between the chart and the label */
+    font-size: 16px; /* Set the font size for the label */
+    font-weight: bold; /* Optional: make the label text bold */
+}
     </style>
 </head>
 <body>
@@ -34,65 +46,60 @@ $colors = [
     <?php foreach ($stagePercentages as $stage => $percentage): ?>
         <div class="percentage-chart-container">
             <canvas id="progress<?= htmlspecialchars($stage) ?>"></canvas>
+            <figcaption class="chart-label"><?= $labels[$stage] ?></figcaption>
         </div>
     <?php endforeach; ?>
 </div>
 
 <script>
     <?php foreach ($stagePercentages as $stage => $percentage): ?>
-    createProgressChart('progress<?= htmlspecialchars($stage) ?>', <?= $percentage ?>, '<?= $colors[$stage] ?>');
+    createProgressChart('progress<?= htmlspecialchars($stage) ?>', <?= $percentage ?>, '<?= $colors[$stage] ?>', '<?= $labels[$stage] ?>');
     <?php endforeach; ?>
 
     // Function to create a chart for a canvas
-    function createProgressChart(canvasId, percentage, color) {
-        var ctx = document.getElementById(canvasId).getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [percentage, 100 - percentage],
-                    backgroundColor: [color, '#e5e5e5'], // Light grey for the unfilled part
-                    borderColor: ['#343a40', '#343a40'], // Dark grey border for both parts
-                    borderWidth: [0, 0],
-                    hoverBorderColor: ['#343a40', '#343a40'],
-                }],
-                labels: [
-                    'Sleep Stage',
-                    'Remaining',
-                ]
+    function createProgressChart(canvasId, percentage, color, label) {
+    var ctx = document.getElementById(canvasId).getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [percentage, 100 - percentage],
+                backgroundColor: [color, 'lightgrey'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            rotation: Math.PI,
+            circumference: 115 * Math.PI,
+            cutout: '60%', // Adjust this for a thicker/thinner ring
+            responsive: false,
+            maintainAspectRatio: false,
+            tooltips: {enabled: false},
+            hover: {mode: null},
+            animation: {
+                animateRotate: false
             },
-            options: {
-                rotation: -0.5 * Math.PI, // Start at the top
-                circumference: 115 * Math.PI, // Full circle
-                cutoutPercentage: 80, // Increase cutout for a thinner ring
-                responsive: true, // Ensure chart is responsive
-                maintainAspectRatio: false, // Maintain aspect ratio
-                tooltips: { enabled: false },
-                hover: { mode: null },
-                animation: {
-                    animateRotate: true,
-                    animateScale: false,
-                },
-                plugins: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: (ctx) => `${ctx.chart.data.datasets[0].data[0]}%`,
-                        color: 'white',
-                        font: {
-                            size: 18
-                        }
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false },
+                title: {
+                    display: true,
+                    text: `${percentage}%`,
+                    color: 'white',
+                    font: {
+                        size: 18
                     }
                 }
             }
-        });
-    }
+        }
+    });
+}
 
-    // Create charts
-    createProgressChart('progressN1', percentages['N1'], '#3498db'); // N1: Blue
-    createProgressChart('progressN2', percentages['N2'], '#e74c3c'); // N2: Red
-    createProgressChart('progressN3', percentages['N3'], '#f1c40f'); // N3: Yellow
-    createProgressChart('progressREM', percentages['REM'], '#2ecc71'); // REM: Green
+// Create charts with labels
+createProgressChart('progressN1', percentages['N1'], '#3498db', 'Light Sleep'); // N1: Blue
+createProgressChart('progressN2', percentages['N2'], '#e74c3c', 'Intermediate Sleep'); // N2: Red
+createProgressChart('progressN3', percentages['N3'], '#f1c40f', 'Deep Sleep'); // N3: Yellow
+createProgressChart('progressREM', percentages['REM'], '#2ecc71', 'REM Sleep');
 </script>
 
 </body>
