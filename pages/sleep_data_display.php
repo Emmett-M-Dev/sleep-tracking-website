@@ -1,5 +1,5 @@
 <?php
-
+include 'includes/sessionconnection.php';
 // this calcualtes the sleep score display in tracker.php
 function calculateSleepScore() {
     global $conn;
@@ -177,8 +177,104 @@ function calculateSleepStreak() {
     return $streakCount;
 }
 
+function getSleepQualityAverage() {
+    global $conn;
 
+    // Initialize the variable to hold the average sleep quality
+    $averageSleepQuality = 0;
 
+    // Prepare the query to calculate the average sleep quality for the logged-in user
+    $query = "SELECT AVG(CASE 
+                WHEN sleep_quality = 'Excellent' THEN 4 
+                WHEN sleep_quality = 'Good' THEN 3 
+                WHEN sleep_quality = 'Fair' THEN 2 
+                WHEN sleep_quality = 'Poor' THEN 1 
+                ELSE 0 END) AS avg_quality 
+              FROM sleep_tracker 
+              WHERE user_id = ?";
+    
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $averageSleepQuality = round($row['avg_quality'], 2);
+    } else {
+        // Handle the case when there's no sleep data
+        $averageSleepQuality = "No sleep data available";
+    }
+
+    $stmt->close();
+
+    // Format the average quality score to a qualitative value
+    $qualityRating = '';
+    switch ($averageSleepQuality) {
+        case ($averageSleepQuality >= 3.5):
+            $qualityRating = 'Excellent';
+            break;
+        case ($averageSleepQuality >= 2.5 && $averageSleepQuality < 3.5):
+            $qualityRating = 'Good';
+            break;
+        case ($averageSleepQuality >= 1.5 && $averageSleepQuality < 2.5):
+            $qualityRating = 'Fair';
+            break;
+        case ($averageSleepQuality < 1.5):
+            $qualityRating = 'Poor';
+            break;
+        default:
+            $qualityRating = 'No data';
+            break;
+    }
+
+    return $qualityRating;
+}
+function getSleepTimeAverage() {
+    global $conn;
+
+    // Initialize variables
+    $totalSleepMinutes = 0;
+    $sleepCount = 0;
+
+    // Prepare the query to fetch all sleep durations for the logged-in user
+    $query = "SELECT sleep_duration FROM sleep_tracker WHERE user_id = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Check if we have entries
+    if ($result->num_rows > 0) {
+        // Calculate the total sleep duration in minutes
+        while ($row = $result->fetch_assoc()) {
+            // Parse the sleep duration string into hours, minutes, and seconds
+            list($hours, $minutes, $seconds) = explode(':', $row['sleep_duration']);
+            $totalSleepMinutes += $hours * 60 + $minutes + $seconds / 60;
+            $sleepCount++;
+        }
+
+        // Calculate the average duration in minutes
+        $averageSleepMinutes = $sleepCount > 0 ? $totalSleepMinutes / $sleepCount : 0;
+
+        // Convert the average duration back to time format
+        $hours = floor($averageSleepMinutes / 60);
+        $minutes = floor($averageSleepMinutes % 60);
+
+        // Format the average duration as a string
+        $averageSleepDuration = sprintf("%02dhrs %02dmins", $hours, $minutes);
+
+    } else {
+        // Handle the case when there's no sleep data
+        $averageSleepDuration = "No sleep data available";
+    }
+
+    $stmt->close();
+
+    return $averageSleepDuration;
+}
 
 
 ?>
+
+

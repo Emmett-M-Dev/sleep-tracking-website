@@ -1,4 +1,16 @@
-<?php include 'includes/sessionconnection.php'; ?>
+<?php  
+include 'sleep_data_display.php'; 
+
+$sleepStreak = calculateSleepStreak();
+$sleepQualityAverage = getSleepQualityAverage();
+$sleepTimeAverage = getSleepTimeAverage();
+
+
+
+
+
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -53,15 +65,15 @@
                     <div class="grid grid-cols-3 gap-4 my-5">
                         <div class="bg-gray-800 p-4 rounded-lg text-center">
                             <p class="text-sm text-gray-400">Sleep Streak</p>
-                            <p class="text-2xl">4</p>
+                            <p class="text-2xl"><?php echo $sleepStreak?></p>
                         </div>
                         <div class="bg-gray-800 p-4 rounded-lg text-center">
                             <p class="text-sm text-gray-400">Sleep Quality Average</p>
-                            <p class="text-2xl">Good</p>
+                            <p class="text-2xl"><?php echo $sleepQualityAverage ?></p>
                         </div>
                         <div class="bg-gray-800 p-4 rounded-lg text-center">
                             <p class="text-sm text-gray-400">Average Sleep</p>
-                            <p class="text-2xl">7hrs 35mins</p>
+                            <p class="text-2xl"><?php echo $sleepTimeAverage?></p>
                         </div>
                     </div>
                     <!-- Sleep Progress Section -->
