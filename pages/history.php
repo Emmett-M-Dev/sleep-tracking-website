@@ -198,7 +198,14 @@ function populateTable() {
     // Destroy the existing chart instance if it exists
     if (sleepDurationChart) {
         sleepDurationChart.destroy();
+        
     }
+
+     // Convert 'HH:MM' formatted strings to decimal hours
+     const durationData = sleepData.map(entry => {
+        const [hours, minutes] = entry.duration.split(':').map(parseFloat);
+        return hours + minutes / 60; // Convert to total hours
+    });
 
     // Create a new chart instance with the selected type
     sleepDurationChart = new Chart(ctxDuration, {
@@ -206,8 +213,8 @@ function populateTable() {
         data: {
             labels: sleepData.map(entry => entry.date),
             datasets: [{
-                label: 'Sleep Duration',
-                data: sleepData.map(entry => entry.duration),
+                label: 'Sleep Duration (Hours)',
+                data: durationData,
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
@@ -224,12 +231,7 @@ function populateTable() {
 
 
 
-// Initial population of the table and charts
-window.onload = () => {
-    populateTable();
-    updateSleepDurationChart('Bar'); // Initialize with default type
-    updateSleepQualityChart('All Qualities'); // Initialize with default quality
-};
+
 
 
 // Chart 2 - sleep quality chart
@@ -279,10 +281,10 @@ function updateSleepQualityChart(selectedQuality) {
                 datasets: [{
                     data: Object.values(qualityPercentages),
                     backgroundColor: ['red', 'orange', 'yellow', 'green', 'blue'],
-                    // ... other pie chart configurations
+                    
                 }]
             },
-            // ... pie chart options
+           
         });
     } else {
         // Create a bar chart for a specific quality
@@ -319,8 +321,13 @@ document.getElementById('qualityDropdown').addEventListener('change', (event) =>
 
 window.onload = () => {
     populateTable();
-    updateSleepQualityChart('All Qualities'); // Initialize with 'All Qualities'
-    
+
+// Initialize the sleep duration chart based on the dropdown's default value
+const defaultChartType = document.getElementById('chartType').value.toLowerCase();
+updateSleepDurationChart(defaultChartType); // Make sure this matches the chart type options ('bar' or 'line')
+
+// Initialize the sleep quality chart with 'All Qualities'
+updateSleepQualityChart('All Qualities');
 };
 
 </script>
