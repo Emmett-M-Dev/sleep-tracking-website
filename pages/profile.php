@@ -1,4 +1,5 @@
 <?php  
+include 'includes/sessionconnection.php';
 include 'sleep_data_display.php'; 
 
 $sleepStreak = calculateSleepStreak();
@@ -50,12 +51,12 @@ $sleepTimeAverage = getSleepTimeAverage();
      
 
         <!-- Main Content -->
-        <div class="w-4/5 p-10">
-    </br>
-    </br>
-            <div class="grid grid-cols-2 gap-10">
-                <!-- Left Column -->
-                <div>
+        <div class="flex-1 p-10">
+            <br><br>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Left Column - Takes full width on small screens and half on medium screens -->
+                <div class="md:col-span-1">
+            
                     <div class="flex items-center justify-between">
                         <h1 class="text-xl font-semibold"><?php echo $username; ?>'s Sleep History</h1>
                         <div class="text-sm">
@@ -115,55 +116,13 @@ $sleepTimeAverage = getSleepTimeAverage();
                     </div>
                 </div>
                 <!-- Right Column -->
-                <div>
-                    <!-- Sleep Notifications Section -->
+                <div class="md:col-span-1">
+                    <!-- Sleep Consistency Section - Removed fixed width to allow responsiveness -->
                     <div class="bg-gray-800 p-6 rounded-lg">
-                        <h2 class="text-lg font-semibold mb-4">Sleep Notifications</h2>
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40" alt="Quality sleep placeholder" class="rounded-full mr-2">
-                                <span>Quality Sleep</span>
-                            </div>
-                            <div class="flex items-center">
-                                <button class="text-blue-500 mx-1"><i class="fas fa-plus"></i></button>
-                                <button class="text-blue-500 mx-1"><i class="fas fa-minus"></i></button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40" alt="Relaxing sleep placeholder" class="rounded-full mr-2">
-                                <span>Relaxing Sleep</span>
-                            </div>
-                            <div class="flex items-center">
-                                <button class="text-blue-500 mx-1"><i class="fas fa-plus"></i></button>
-                                <button class="text-blue-500 mx-1"><i class="fas fa-minus"></i></button>
-                            </div>
-                        </div>
-                        <a href="#" class="text-blue-500 text-sm">View All</a>
+                        <?php include 'consistencyChart.php'?>
                     </div>
-                    <!-- Sleep Friends Section -->
-                    <div class="bg-gray-800 p-6 rounded-lg mt-5">
-                        <h2 class="text-lg font-semibold mb-4">Sleep Friends</h2>
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40" alt="Sleep buddy placeholder" class="rounded-full mr-2">
-                                <span>Sleep Buddy</span>
-                            </div>
-                            <button class="text-blue-500 text-sm">Profile</button>
-                        </div>
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center">
-                                <img src="https://placehold.co/40x40" alt="Sleep partner placeholder" class="rounded-full mr-2">
-                                <span>Sleep Partner</span>
-                            </div>
-                            <button class="text-blue-500 text-sm">Profile</button>
-                        </div>
-                        <a href="#" class="text-blue-500 text-sm">View All</a>
-                    </div>
-                    <div class="flex justify-between mt-5">
-                        <button class="bg-blue-600 py-2 px-4 rounded-lg text-sm">Find Friends</button>
-                        <button class="bg-purple-600 py-2 px-4 rounded-lg text-sm">Invite Friends</button>
-                    </div>
+                    
+                    
                 </div>
             </div>
         </div>

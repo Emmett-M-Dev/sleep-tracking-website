@@ -1,5 +1,5 @@
 <?php
-include 'includes/sessionconnection.php';
+
 // this calcualtes the sleep score display in tracker.php
 function calculateSleepScore() {
     global $conn;

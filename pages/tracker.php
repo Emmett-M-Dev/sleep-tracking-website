@@ -338,45 +338,42 @@ if ($sleepData) {
         <section id='section-3' class="scroll-arrow relative flex flex-col text-gray justify-center py-8 px-4 items-center text-center bg-gray-600 text-white" style= "background-image: url('includes/images/sunn3.png')";>
         <!-- <img src="includes/images/sunn3.png" alt="MorningSky" class="absolute top-0 left-0 w-full h-full object-cover" /> -->
     <!-- Header -->
-    <div class="text-center mb-6">
+    <!-- <div class="text-center mb-6">
         <h2 class="text-3xl font-bold mb-2">Your Sleep Overview</h2>
         <p class="text-lg">Explore your sleep patterns and get tips for better rest.</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <!-- Sleep Trend Chart Container -->
-        <div class="chart-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
+        <!-- <div class="chart-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
             
-        </div>
+        </div> -->
 
 
 
 
         <!-- Sleep Insights Container -->
-        <div class="insights-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
+        <!-- <div class="insights-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
             <h3 class="text-xl font-semibold mb-3">Sleep Insights</h3>
-            <?php
-       
-       
-        ?>
+            
             <ul id="sleepInsights" class="list-disc list-inside">
-                <!-- Sleep insights will be populated here -->
-            </ul>
+                 Sleep insights will be populated here -->
+            <!-- </ul>
         </div>
-    </div>
+    </div> -->
 
     <!-- Additional Charts -->
-    <div class="additional-charts grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+    <!-- <div class="additional-charts grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
         <div class="sleep-quality-chart bg-gray-700 rounded-lg shadow-lg p-4">
             <canvas id="sleepQualityChart"></canvas>
-        </div>
+        </div> -->
             <!-- Personalized Sleep Tips Container -->
-        <div class="tips-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
-        <h3 class="text-xl font-semibold mb-3">Personalized Sleep Tips</h3>
+        <!-- <div class="tips-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
+        <h3 class="text-xl font-semibold mb-3">Personalized Sleep Tips</h3> -->
         <!-- Sleep tips will be populated here -->
-    </div>
+    <!-- </div>
         
-    </div>
+    </div> -->
 
 
     
