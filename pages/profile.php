@@ -6,8 +6,21 @@ $sleepStreak = calculateSleepStreak();
 $sleepQualityAverage = getSleepQualityAverage();
 $sleepTimeAverage = getSleepTimeAverage();
 
+$averageBedtime = getAverageBedtime(); // Now correctly using the new function
+// Assuming the function returns "No sleep data available" if no data exists
+$recommendedWakeupTime = "";
 
+// Check if we have a valid average bedtime before trying to calculate the recommended wakeup time
+if ($averageBedtime !== "No sleep data available") {
+    $bedtimeDateTime = new DateTime($averageBedtime);
+    $recommendedWakeupTime = $bedtimeDateTime->modify('+8 hours')->format('H:i');
+    $wakeupMessage = "To help reinforce your body's natural circadian rhythm, we recommend waking up at $recommendedWakeupTime. This complements your bedtime and completes an ideal 8 hours of rest.";
+} else {
+    $wakeupMessage = "We can't calculate your optimal wake-up time yet. Try logging your sleep for a few days.";
+}
 
+// Prepare the educational snippet on the benefits of consistent sleep time
+$whyConsistencyMatters = "Maintaining a regular sleep schedule helps synchronize your body's internal clock, leading to better sleep quality. It can improve your mood, brain function, and overall health.";
 
 
 ?>
@@ -60,7 +73,7 @@ $sleepTimeAverage = getSleepTimeAverage();
                     <div class="flex items-center justify-between">
                         <h1 class="text-xl font-semibold"><?php echo $username; ?>'s Sleep History</h1>
                         <div class="text-sm">
-                            <span>Last Night's Sleep</span>
+                            <span>Your Sleep Information</span>
                         </div>
                     </div>
                     <div class="grid grid-cols-3 gap-4 my-5">
@@ -77,43 +90,49 @@ $sleepTimeAverage = getSleepTimeAverage();
                             <p class="text-2xl"><?php echo $sleepTimeAverage?></p>
                         </div>
                     </div>
-                    <!-- Sleep Progress Section -->
-                    <div class="bg-gray-800 p-6 rounded-lg my-5">
-                        <h2 class="text-lg font-semibold mb-4">Sleep Progress</h2>
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="text-center">
-                                <i class="fas fa-check-circle fa-2x mb-2"></i>
-                                <p>Completed Sleep</p>
-                                <p>3</p>
-                            </div>
-                            <div class="text-center">
-                                <i class="fas fa-bed fa-2x mb-2"></i>
-                                <p>Total Sleep Hours</p>
-                                <p>Total Sleep</p>
-                            </div>
-                            <div class="text-center">
-                                <i class="fas fa-trophy fa-2x mb-2"></i>
-                                <p>Sleep Achievements</p>
-                                <p>7</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Sleep Achievements Section -->
-                    <div class="bg-gray-800 p-6 rounded-lg">
-                        <h2 class="text-lg font-semibold mb-4">Sleep Achievements</h2>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="text-center">
-                                <i class="fas fa-stream fa-2x mb-2"></i>
-                                <p>Sleep Streak</p>
-                                <p>2/3</p>
-                            </div>
-                            <div class="text-center">
-                                <i class="fas fa-gem fa-2x mb-2"></i>
-                                <p>Sleep Points</p>
-                                <p>1200/3000</p>
-                            </div>
-                        </div>
-                    </div>
+                    
+                    
+                    <!-- Optimal Sleep Schedule Section -->
+                    <div class="container mx-auto p-8 bg-gray-800 rounded-lg shadow-xl mt-5">
+    <h2 class="text-2xl font-semibold mb-6 text-white">Your Targeted Sleep Schedule</h2>
+    
+    <!-- Consistent Bedtime Section -->
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-2 text-white">Consistent Bedtime: Your Key to Better Sleep</h3>
+        <p class="text-md text-white">Based on your recent sleep history, you tend to fall asleep around <span class="font-semibold"><?php echo $averageBedtime; ?></span>. Let's aim to maintain this routine for consistency.</p>
+    </div>
+    
+    <!-- Why Consistency Matters -->
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-2 text-white">Why Consistency Matters</h3>
+        <p class="text-md text-white"><?php echo $whyConsistencyMatters; ?></p>
+    </div>
+    
+    <!-- Tonight's Bedtime Goal -->
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-2 text-white">Tonight's Bedtime Goal</h3>
+        <p class="text-md text-white"><?php echo $averageBedtime !== "No sleep data available" ? "To help reinforce your body's natural circadian rhythm, we recommend continuing to fall asleep at <span class='font-semibold'>$averageBedtime</span>." : "Log your sleep to receive personalized recommendations."; ?></p>
+    </div>
+    
+    <!-- Importance of Routine -->
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-2 text-white">Importance of Routine</h3>
+        <p class="text-md text-white mb-2">Having a consistent nightly routine is crucial for several reasons:</p>
+        <ul class="list-disc pl-5 text-white">
+            <li>Sleep Efficiency: Consistency leads to faster sleep onset and fewer nighttime awakenings.</li>
+            <li>Hormonal Balance: It supports natural hormonal cycles, including the release of melatonin.</li>
+            <li>Overall Health: Regular sleep patterns are linked with a lower risk of chronic diseases.</li>
+        </ul>
+    </div>
+    
+    <!-- Ideal Wake Time -->
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-2 text-white">Ideal Wake Time</h3>
+        <p class="text-md text-white"><?php echo $wakeupMessage; ?></p>
+    </div>
+</div>
+
+
                 </div>
                 <!-- Right Column -->
                 <div class="md:col-span-1">

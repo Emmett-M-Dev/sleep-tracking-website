@@ -274,7 +274,51 @@ function getSleepTimeAverage() {
     return $averageSleepDuration;
 }
 
+function getAverageBedtime() {
+    global $conn;
 
+    $userId = $_SESSION['user_id'] ?? die("User is not logged in.");
+    $query = "SELECT sleep_time FROM sleep_tracker WHERE user_id = ? ORDER BY date_of_sleep ASC";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $adjustedSleepTimes = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $timeParts = explode(':', $row['sleep_time']);
+        $hours = (int)$timeParts[0];
+        $minutes = (int)$timeParts[1];
+        // Adjust times past midnight to the next day for averaging
+        $timeAsDecimal = $hours + ($minutes / 60);
+        if ($timeAsDecimal < 13) { // If time represents early morning, adjust it by adding 24 hours
+            $timeAsDecimal += 24;
+        }
+        $adjustedSleepTimes[] = $timeAsDecimal;
+    }
+
+    if (empty($adjustedSleepTimes)) return "No sleep data available";
+
+    // Calculate the average sleep time using adjusted times
+    $meanSleepTime = array_sum($adjustedSleepTimes) / count($adjustedSleepTimes);
+
+    // Adjust the average back if it's beyond 24 hours for display purposes
+    if ($meanSleepTime > 24) {
+        $meanSleepTime -= 24;
+    }
+
+    // Convert decimal time back to hours and minutes
+    $avgHours = floor($meanSleepTime);
+    $avgMinutes = round(($meanSleepTime - $avgHours) * 60);
+
+    // Format the average bedtime as HH:MM
+    $formattedAvgBedtime = sprintf("%02d:%02d", $avgHours, $avgMinutes);
+
+    $stmt->close();
+
+    return $formattedAvgBedtime;
+}
 ?>
 
 
