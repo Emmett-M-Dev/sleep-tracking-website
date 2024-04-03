@@ -71,7 +71,7 @@ $whyConsistencyMatters = "Maintaining a regular sleep schedule helps synchronize
                 <div class="md:col-span-1">
             
                     <div class="flex items-center justify-between">
-                        <h1 class="text-xl font-semibold"><?php echo $username; ?>'s Sleep History</h1>
+                        <h1 class="text-xl font-semibold"><?php echo $username; ?>'s Sleep Profile</h1>
                         <div class="text-sm">
                             <span>Your Sleep Information</span>
                         </div>
