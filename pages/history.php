@@ -65,14 +65,14 @@ $conn->close();
     <?php include 'includes/nav.php'; ?>
 
     <!-- Content section for sleep history and trends -->
-</br>
-</br>
+
+
 
     <!-- Content section for sleep history and trends -->
     <div class="container mx-auto mt-24 p-8">
         <h2 class="text-3xl text-white mb-4">Hello, <?php echo $username ?></h2>
         <div class="bg-dark-panel rounded-lg p-8 shadow-lg">
-            <p class="text-2xl">Your sleep history and trends will display here.</p>
+           
             
 <div class="container mx-auto mt-8 p-4">
     <!-- Chart Section -->

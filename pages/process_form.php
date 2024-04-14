@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("issssss", $userId, $dateOfSleep, $sleepTime, $wakeTime, $sleepDuration, $sleepQuality, $comments);
 
         if ($stmt->execute()) {
-            // $sleepStages = estimateSleepStages($sleepTime, $wakeTime); // Your custom function for sleep stage calculation
+            
             // Successfully inserted
             header('Location: tracker.php?status=success');
             exit(); 

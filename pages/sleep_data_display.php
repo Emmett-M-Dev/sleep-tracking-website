@@ -75,7 +75,7 @@ function calculateSleepScore() {
 
     $stmt->close();
 
-    return $sleepScore;
+    return round($sleepScore);
 }
 // 
 function getLastSleepDuration() {

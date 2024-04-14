@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
                 </div>
                 <p class="text-center">or</p>
                 <div class="input-group">
-                    <a href="login.php" class="text-blue-500">Log In</a>
+                    <a href="login.php" class="bg-blue-500 text-white rounded p-2">Log In</a>
                 </div>
             </form>
         </div>

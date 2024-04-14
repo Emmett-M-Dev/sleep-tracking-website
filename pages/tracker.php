@@ -226,16 +226,16 @@ if ($sleepData) {
     <!-- Right Div: Sub Progress Bars -->
     <div class="space-y-4">
         <div class="flex items-center justify-between">
-            <span class="text-sm">Hours Slept </span>
-            
-            <span class="text-sm font-semibold" id="hoursSleptDisplay"><?php echo $lastSleepDuration  ?></span>
+            <span class="text-sm">Hours Slept</span>
+
+            <span class="text-sm font-semibold" id="hoursSleptDisplay">  <?php echo $lastSleepDuration;  ?></span>
         </div>
 
         <div class="flex items-center justify-between">
             <span class="text-sm">Wake Time</span>
             <span class="text-sm font-semibold" id="wakeTimeDisplay"><?php echo $wakeTime; ?></span>
             
-                <!-- The width of the bar could be dynamic based on wake time, if relevant -->
+                
                
             </div>
         
@@ -352,41 +352,47 @@ if ($sleepData) {
 </div>
 <!-- arrow to next section -->
 <div class="absolute inset-x-0 bottom-0 h-16">
-        <a href="#section-3" class="scroll-arrow">
+        <a href="#section-4" class="scroll-arrow">
             <i class="fa fa-arrow-down"></i> Continue 
         </a>
     </div>
   </section>
 
 
-        <!-- Section 3: Sleep Overview -->
-        <section id='section-3' class="scroll-arrow relative flex flex-col text-gray justify-center py-8 px-4 items-center text-center bg-gray-600 text-white" style= "background-image: url('includes/images/sunn3.png')";>
-        <!-- <img src="includes/images/sunn3.png" alt="MorningSky" class="absolute top-0 left-0 w-full h-full object-cover" /> -->
-    
+       
 
-    
-</section>
+  <section id='section-4' class="relative py-8 px-4 bg-gray-600 text-white">
+  <div class="flex flex-col items-center w-full max-w-6xl mx-auto">
 
-<section id='section-4' class="relative flex justify-center py-8 px-4 items-start text-center bg-gray-600 text-white">
-  <div class="flex justify-around items-start w-full max-w-6xl"> <!-- Use justify-around for even spacing -->
-  
-    <!-- Progress Bars Container -->
-    <div class="progress-bars-container flex flex-col justify-start mr-12"> <!-- Vertically stacked progress bars -->
-      <?php include 'percentageBars.php'; ?> <!-- Includes the progress bars -->
-    </div>
-    
-    <!-- Chart Container -->
-    <div class="chart-container flex-1 mr-12"> <!-- Flex container for the chart -->
-      <?php include 'wakeTimesChart.php'; ?>
+    <!-- Title and Subheading -->
+    <div class="w-full text-center mb-8">
+      <h1 class="text-3xl font-bold">Your Predicted Sleep Cycle</h1>
+      <p class="text-xl font-light">Let's have an in-depth look on your personal Hypnogram, detailing the stages of sleep throughout the night.</p>
     </div>
 
-    <!-- Sleep Stage Information -->
-    <div class="sleep-info-container">
-      <div id="sleepStageInfo" class="sleep-info hidden"> <!-- Hidden by default, shown on hover -->
-        <h2 id="sleepStageTitle">N1: Light Sleep</h2>
-        <p id="sleepStageDescription">This stage marks the transition from wakefulness into sleep and usually lasts for a short period. It's easy to be awakened from this stage, and if disrupted, one may not feel as if they've slept at all.</p>
+    <!-- Main Content Container -->
+    <div class="flex flex-col lg:flex-row justify-around items-start w-full">
+
+      <!-- Progress Bars Container -->
+      <div class="progress-bars-container flex flex-col justify-start mb-8 lg:mb-0 lg:mr-12">
+        <?php include 'percentageBars.php'; ?>
       </div>
+
+      <!-- Chart Container -->
+      <div class="chart-container flex-grow flex justify-center items-center mb-8 lg:mb-0">
+        <?php include 'wakeTimesChart.php'; ?>
+      </div>
+
+      <!-- Sleep Stage Information -->
+      <div class="sleep-info-container w-full lg:w-auto">
+        <div id="sleepStageInfo" class="sleep-info">
+          <h2 id="sleepStageTitle">N1: Light Sleep</h2>
+          <p id="sleepStageDescription">This stage marks the transition from wakefulness into sleep and usually lasts for a short period. It's easy to be awakened from this stage, and if disrupted, one may not feel as if they've slept at all.</p>
+        </div>
+      </div>
+
     </div>
+  </div>
 </section>
 
 

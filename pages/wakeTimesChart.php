@@ -1,5 +1,5 @@
 
-<!-- Rest of the wakeTimesChart.php content -->
+
 <?php
 // Include the PHP file that defines getLatestSleepData() and calculateSleepStages()
 //include 'chartSleepData.php';

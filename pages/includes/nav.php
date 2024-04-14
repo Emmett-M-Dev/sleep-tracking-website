@@ -17,12 +17,12 @@
       font-weight: 700;
   }
 </style>
-<nav class="nav bg-black p-4 text-white fixed w-full flex justify-between items-center">
+<nav class="nav  p-4 text-white fixed w-full flex justify-between items-center">
         <span class="text-xl font-bold ml-4">Sleepio</span>
         <div class="mr-8">
             <a href="dashboard.php" class="text-white px-4 hover:text-gray-300">Dashboard</a>
             <a href="history.php" class="text-white px-4 hover:text-gray-300">History</a>
             <a href="profile.php" class="text-white px-4 hover:text-gray-300">Profile</a>
-            <a href="#" class="text-white px-4 hover:text-gray-300">Settings</a>
+            <a href="tracker.php" class="text-white px-4 hover:text-gray-300">Tracker</a>
         </div>
     </nav>

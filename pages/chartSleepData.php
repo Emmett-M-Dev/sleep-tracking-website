@@ -3,10 +3,6 @@
 function getLatestSleepData() {
     global $conn;
 
-    
-       
-    
-
     // Query to get the last sleep entry for the user
     $query = "SELECT sleep_time, wake_time, sleep_quality FROM sleep_tracker WHERE user_id = ? ORDER BY date_of_sleep DESC LIMIT 1";
     $stmt = $conn->prepare($query);

@@ -52,7 +52,7 @@ $whyConsistencyMatters = "Maintaining a regular sleep schedule helps synchronize
             
             position: relative; /* Ensures content is positioned over the background */
             z-index: 1; /* Higher than the default z-index of 0 */
-            /* Other styles such as padding, margin, etc. */
+            
         }
     </style>
 </head>
@@ -86,7 +86,7 @@ $whyConsistencyMatters = "Maintaining a regular sleep schedule helps synchronize
                             <p class="text-2xl"><?php echo $sleepQualityAverage ?></p>
                         </div>
                         <div class="bg-gray-800 p-4 rounded-lg text-center">
-                            <p class="text-sm text-gray-400">Average Sleep</p>
+                            <p class="text-sm text-gray-400">Average Sleep Duration</p>
                             <p class="text-2xl"><?php echo $sleepTimeAverage?></p>
                         </div>
                     </div>

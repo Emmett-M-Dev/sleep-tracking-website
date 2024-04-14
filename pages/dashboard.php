@@ -1,8 +1,5 @@
 <?php include 'includes/sessionconnection.php'; ?>
-<?php 
 
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -77,8 +74,8 @@
             <!-- Third Feature -->
             <div class="flex flex-col items-center feature-fade-in">
                 <img src="includes/images/research.png" alt="Up-to-Date Sleep Research" class="mb-4">
-                <h3 class="text-xl font-bold mb-2 text-white">Up-to-Date Sleep Research</h3>
-                <p class="text-white">Up-to-Date research provided along side sleep insights.</p>
+                <h3 class="text-xl font-bold mb-2 text-white">Relevant Sleep Research</h3>
+                <p class="text-white">Relevant research provided along side sleep insights.</p>
             </div>
         </div>
         <div class="flex justify-center mt-8">
@@ -93,43 +90,33 @@
  
         <!-- Icon Buttons Column -->
        
-<div class="flex-2 grid grid-cols-2 md:grid-cols-4 gap-4 p-8 text-center feature-fade-in">
+<div class="flex-2 grid grid-cols-2 md:grid-cols-5 gap-4 p-8 text-center feature-fade-in">
+    
+  
     <!-- Icon 1 -->
-    <a href="statistics.php" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400" >
-        <i class="fas fa-chart-bar fa-3x text-white mb-2"></i>
-        <p class="text-white text-lg">Sleep Analytics</p>
-</a>
-    <!-- Icon 2 -->
     <a href="history.php" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400" href="#">
         <i class="fas fa-history fa-3x text-white mb-2"></i>
         <p class="text-white text-lg">Sleep History</p>
 </a>
-    <!-- Icon 3 -->
-    <a href="dreams.php" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400">
+    <!-- Icon 2 -->
+    <a href="tracker.php" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400">
         <i class="fas fa-book-open fa-3x text-white mb-2"></i>
-        <p class="text-white text-lg">Dream Diary</p>
+        <p class="text-white text-lg">tracker</p>
 </a>
-    <!-- Icon 4 -->
-    <a href="statistics.php" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400">
-        <i class="fas fa-question fa-3x text-white mb-2"></i>
-        <p class="text-white text-lg">FAQ</p>
-</a>
-<!-- Icon 5 -->
-    <a href="#" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400" >
-        <i class="fas fa-newspaper fa-3x text-white mb-2"></i>
-        <p class="text-white text-lg">Sleep News</p>
-</a>
-    <!-- Icon 6 -->
+   
+
+
+    <!-- Icon 3 -->
     <a href="profile.php" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400" href="#">
         <i class="fas fa-user-circle fa-3x text-white mb-2"></i>
         <p class="text-white text-lg">Profile</p>
 </a>
-    <!-- Icon 7 -->
+    <!-- Icon 4 -->
     <a href="registration.php" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400">
         <i class="fas fa-clipboard fa-3x text-white mb-2"></i>
         <p class="text-white text-lg">Register</p>
 </a>
-    <!-- Icon 8 -->
+    <!-- Icon 5 -->
     <a href="https://localhost/phpmyadmin/index.php?route=/database/structure&db=emurray46" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400" target="_blank>
         <i class="fas fa-screwdriver-wrench fa-3x text-white mb-2"></i>
         <p class="text-white text-lg">other</p>
@@ -137,35 +124,7 @@
     <!-- Additional icons... -->
 </div>
 <!-- Featured Courses Section -->
-<div class="mb-8 feature-fade-in">
-            <h2 class="text-2xl font-bold mb-4">Featured Courses</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Course Cards Go Here -->
-                <div class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400">
-    <img src="" alt="Course Image" class="rounded-lg mb-4">
-    <div>
-        <h3 class="font-bold">Your Sleep</h3>
-        <p class="text-gray-400">Sleep Statistics</p>
-        <div class="flex items-center justify-between mt-2">
-            <span class="text-sm">1h 53m</span>
-            <span>⭐ 4.9/5</span>
-        </div>
-    </div>
-</div>
-<!-- course 2 -->
-<div class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400">
-    <img src="" alt="Course Image" class="rounded-lg mb-4">
-    <div>
-        <h3 class="font-bold">Your Sleep</h3>
-        <p class="text-gray-400">Sleep Statistics</p>
-        <div class="flex items-center justify-between mt-2">
-            <span class="text-sm">1h 53m</span>
-            <span>⭐ 4/5</span>
-        </div>
-    </div>
-</div>
-            </div>
-        </div>
+
         
 
   
