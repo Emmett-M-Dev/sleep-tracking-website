@@ -15,7 +15,7 @@ $sleepScore = calculateSleepScore();
 $lastSleepDuration = getLastSleepDuration();
 $wakeTime = getLatestWakeTime();
 $sleepStreak = calculateSleepStreak();
-
+$sleepTimeAverage = getSleepTimeAverage();
 $sleepData = getLatestSleepData();
 
 // Check if sleep data is available and calculate sleep cycles if so
@@ -173,6 +173,26 @@ if ($sleepData) {
     opacity: 1;
   }
 }
+
+.sleep-schedule-assistant {
+  background: linear-gradient(to right, #4b6cb7, #182848);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    margin-top: 20px; /* To give some space from the form */
+    width: 700px;
+}
+
+.suggested-sleep-time {
+    margin-bottom: 20px;
+}
+
+.sleep-duration-visualization {
+  max-width: 500px; /* Adjust as necessary */
+  margin: 20px auto;
+}
+
 </style>
 
 </head>
@@ -294,31 +314,36 @@ if ($sleepData) {
 
 
  
-<!-- Calendar Widget Container -->
-<div id="calendar-widget" class="calendar-container p-6">
-  <div class="bg-gray-700 p-4 rounded-lg">
-    <!-- Calendar Header -->
-    <div class="calendar-header flex justify-between items-center mb-4">
-      <button id="prev-month" class="calendar-nav p-2 bg-gray-600 rounded">
-        <span class="fas fa-chevron-left"></span>
-      </button>
-      <div id="current-month" class="current-month">Month Year</div>
-      <button id="next-month" class="calendar-nav p-2 bg-gray-600 rounded">
-        <span class="fas fa-chevron-right"></span>
-      </button>
+<!-- rght hand side of screen -->
+
+  <!-- Right Hand Side - Sleep Schedule Assistant -->
+  <div class="sleep-schedule-assistant">
+    <!-- Suggested Sleep Time -->
+    <div class="suggested-sleep-time">
+        <h3 class="text-lg font-semibold">Suggested Sleep Time</h3>
+        <p class="text-2xl" id="suggestedSleepTime">
+            <?php echo getAverageBedtime(); ?> <!-- Average bedtime output -->
+        </p>
+        <p class="text-sm">Based on your recent sleep patterns.</p>
     </div>
 
-    <!-- Calendar Grid -->
-    <div class="calendar-grid grid grid-cols-7 gap-4">
-      <!-- Weekday Headers -->
-      <div class="text-center font-bold">Sun</div>
-      <div class="text-center font-bold">Mon</div>
-      <div class="text-center font-bold">Tue</div>
-      <div class="text-center font-bold">Wed</div>
-      <div class="text-center font-bold">Thu</div>
-      <div class="text-center font-bold">Fri</div>
-      <div class="text-center font-bold">Sat</div>
-      <!-- Day Cells (to be populated by JavaScript) -->
+    <!-- Ideal Sleep Duration Visualization -->
+    <div class="sleep-duration-visualization">
+  <canvas id="sleepDurationChart"></canvas>
+  
+</div>
+<div id="sleepTimeFeedback"></div>
+
+</div>
+
+  
+
+
+
+    
+
+   
+      
     </div>
   </div>
 </div>
@@ -337,44 +362,7 @@ if ($sleepData) {
         <!-- Section 3: Sleep Overview -->
         <section id='section-3' class="scroll-arrow relative flex flex-col text-gray justify-center py-8 px-4 items-center text-center bg-gray-600 text-white" style= "background-image: url('includes/images/sunn3.png')";>
         <!-- <img src="includes/images/sunn3.png" alt="MorningSky" class="absolute top-0 left-0 w-full h-full object-cover" /> -->
-    <!-- Header -->
-    <!-- <div class="text-center mb-6">
-        <h2 class="text-3xl font-bold mb-2">Your Sleep Overview</h2>
-        <p class="text-lg">Explore your sleep patterns and get tips for better rest.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Sleep Trend Chart Container -->
-        <!-- <div class="chart-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
-            
-        </div> -->
-
-
-
-
-        <!-- Sleep Insights Container -->
-        <!-- <div class="insights-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
-            <h3 class="text-xl font-semibold mb-3">Sleep Insights</h3>
-            
-            <ul id="sleepInsights" class="list-disc list-inside">
-                 Sleep insights will be populated here -->
-            <!-- </ul>
-        </div>
-    </div> -->
-
-    <!-- Additional Charts -->
-    <!-- <div class="additional-charts grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-        <div class="sleep-quality-chart bg-gray-700 rounded-lg shadow-lg p-4">
-            <canvas id="sleepQualityChart"></canvas>
-        </div> -->
-            <!-- Personalized Sleep Tips Container -->
-        <!-- <div class="tips-container p-4 bg-gray-700 text-white rounded-lg shadow-lg">
-        <h3 class="text-xl font-semibold mb-3">Personalized Sleep Tips</h3> -->
-        <!-- Sleep tips will be populated here -->
-    <!-- </div>
-        
-    </div> -->
-
+    
 
     
 </section>
@@ -515,14 +503,114 @@ function updateSleepWidget(sleepData) {
         document.querySelector('.bg-red-500').style.width = sleepData.sleepStreak * 10 + '%';
     }
 
-    // Make an AJAX call to the PHP script that returns the sleep data as JSON
-    
 
+    function convertTimeToDecimal(timeString) {
+    let [hours, minutes] = timeString.split(' ');
+    hours = parseInt(hours);
+    minutes = parseInt(minutes);
+    return hours + (minutes / 60);
+}
 
-       
+// Let's say PHP echoes the string directly into JavaScript
+const sleepDurationString = "<?php echo getSleepTimeAverage(); ?>"; // "9hrs 35mins"
+const sleepDurationData = convertTimeToDecimal(sleepDurationString.replace('hrs', '').replace('mins', ''));
 
+const recommendedSleepDuration = 8; // The commonly recommended duration in hours
 
+const ctx = document.getElementById('sleepDurationChart').getContext('2d');
+const sleepDurationChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Your Average Sleep', 'Recommended Sleep'],
+    datasets: [{
+      label: 'Hours of Sleep',
+      data: [sleepDurationData, recommendedSleepDuration],
+      backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'],
+      borderColor: ['rgba(75, 192, 192, 1)', 'rgba(54, 162, 235, 1)'],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    indexAxis: 'y', // This will make the chart horizontal
+    scales: {
+      x: { // 'x' replaces 'xAxes' in Chart.js 3
+        beginAtZero: true,
+        ticks: {
+          color: 'white',
+          stepSize: 1,
+          suggestedMax: 10 // Adjust accordingly
+        },
+        title: {
+            display: true,
+            text: 'Hours',
+            color: 'white' // Changes x-axis title to white
+        }
+      },
+            y: { // Configures the y-axis
+                ticks: {
+                    color: 'white', // Changes y-axis tick labels to white
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: 'white' // Would change legend labels to white, but legend is hidden
+                },
+                display: false // Keeps the legend hidden
+            }
+        },
+    maintainAspectRatio: false,
+    responsive: true
+  }
+});
 
+    let sleepScore = <?php echo json_encode($sleepScore); ?>;
+    let lastSleepDuration = <?php echo json_encode($lastSleepDuration); ?>;
+    let wakeTime = <?php echo json_encode($wakeTime); ?>;
+    let sleepStreak = <?php echo json_encode($sleepStreak); ?>;
+    let sleepTimeAverage = <?php echo json_encode($sleepTimeAverage); ?>;
+    let sleepData = <?php echo json_encode($sleepData); ?>;
+
+    function updateSleepTimeFeedback(averageSleepHours) {
+    console.log("updateSleepTimeFeedback called with:", averageSleepHours); 
+    const feedbackElement = document.getElementById('sleepTimeFeedback');
+    let message = '';
+
+    if (averageSleepHours >= 8) {
+        message = `Fantastic! You're averaging <strong>more than the recommended 8 hours</strong> of sleep, which is excellent for your health and well-being. Your current sleep score is <strong>${sleepScore}</strong>, indicating you're doing great. You've maintained a sleep streak of <strong>${sleepStreak} days</strong>, showing commendable consistency. Keep up the great work!
+
+        <p>Remember, quality is just as important as quantity. Your last sleep duration was <strong>${lastSleepDuration}</strong>, and you typically wake up around <strong>${wakeTime}</strong>. To further improve your sleep quality:</p>
+        
+        <ul>
+            <li>-Stick to your sleep schedule to reinforce your body's sleep-wake cycle.</li>
+            <li>-Evaluate your sleep environment and ensure it's optimized for rest.</li>
+            <li>-Consider mindfulness or relaxation techniques if you're having trouble winding down.</li>
+        </ul>
+        
+        <p>Quality sleep enhances mood, cognitive function, and overall health. Continue prioritizing your restful nights.</p>`;
+    } else {
+        message = `It looks like you're averaging <strong>less than the recommended 8 hours</strong> of sleep, currently at an average of <strong>${sleepTimeAverage}</strong>. While it's essential to aim for 7-9 hours of sleep for most adults, we understand everyone's needs can vary. Your sleep score is <strong>${sleepScore}</strong>, indicating there's room for improvement. Here are some personalized tips to help you extend your sleep duration and enhance its quality:
+
+        <ol>
+            <li><strong>-Consistency is Key</strong>: You've maintained a sleep streak of <strong>${sleepStreak} days</strong>, which is a great start. Try setting a slightly earlier bedtime to gradually increase your sleep duration.</li>
+            <li><strong>-Optimize Your Environment</strong>: Your usual wake time is around <strong>${wakeTime}</strong>. Consider adjusting your environment to encourage waking up feeling refreshed.</li>
+            <li><strong>-Prepare for Rest</strong>: Introduce relaxing activities into your evening routine. Whether it's reading, yoga, or meditation, find what helps you unwind.</li>
+            <li><strong>-Monitor Your Progress</strong>: Keep an eye on your sleep data. Notice patterns and see how changes in your routine affect your sleep quality and duration.</li>
+        </ol>
+
+        <p>Remember, enhancing your sleep is a gradual process. Celebrate the small victories and stay motivated to achieve restful nights for your health and well-being.</p>`;
+    }
+
+    feedbackElement.innerHTML = message;
+}
+
+updateSleepTimeFeedback(sleepDurationData);
+
+// If using window.addEventListener, ensure it's correctly structured
+window.addEventListener('load', () => {
+    updateSleepTimeFeedback(sleepDurationData);
+});
 
         
 });
