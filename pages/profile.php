@@ -6,8 +6,8 @@ $sleepStreak = calculateSleepStreak();
 $sleepQualityAverage = getSleepQualityAverage();
 $sleepTimeAverage = getSleepTimeAverage();
 
-$averageBedtime = getAverageBedtime(); // Now correctly using the new function
-// Assuming the function returns "No sleep data available" if no data exists
+$averageBedtime = getAverageBedtime(); 
+
 $recommendedWakeupTime = "";
 
 // Check if we have a valid average bedtime before trying to calculate the recommended wakeup time
@@ -19,7 +19,7 @@ if ($averageBedtime !== "No sleep data available") {
     $wakeupMessage = "We can't calculate your optimal wake-up time yet. Try logging your sleep for a few days.";
 }
 
-// Prepare the educational snippet on the benefits of consistent sleep time
+//  educational snippet on the benefits of consistent sleep time
 $whyConsistencyMatters = "Maintaining a regular sleep schedule helps synchronize your body's internal clock, leading to better sleep quality. It can improve your mood, brain function, and overall health.";
 
 

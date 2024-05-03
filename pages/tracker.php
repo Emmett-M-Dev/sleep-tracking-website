@@ -28,21 +28,9 @@ if ($sleepData) {
     $sleepCycles = []; // Empty array
 }
 
-//////Code for testing if the getLatestSleepData method works//////
-// echo "Sleep Data Fetched:<br><pre>";
-// print_r($sleepData);
-// echo "</pre>";
-// if ($sleepData) {
-//     $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time']);
-    
-//     echo "Calculated Sleep Cycles:<br><pre>";
-//     print_r($sleepCycles);
-//     echo "</pre>";
-// } else {
-//     echo "No sleep data available for the user.";
-// }
 
 
+$today = date('Y-m-d');
 
 
 ?>
@@ -270,7 +258,7 @@ if ($sleepData) {
         <!-- Date of Sleep Input -->
         <div class="mb-4">
             <label for="dateOfSleep" class="block mb-2">Date of Sleep</label>
-            <input type="date" id="dateOfSleep" name="dateOfSleep" class="w-full p-2 bg-gray-600 rounded" required>
+            <input type="date" id="dateOfSleep" name="dateOfSleep" class="w-full p-2 bg-gray-600 rounded" required max="<?php echo $today; ?>">
         </div>
 
         <!-- Sleep Time Input -->
@@ -402,19 +390,7 @@ if ($sleepData) {
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-       //scroll feature for screen
-    //     document.querySelectorAll('.scroll-arrow').forEach(anchor => {
-    //     anchor.addEventListener('click', function (e) {
-    //         e.preventDefault();
-
-    //         const targetSection = document.querySelector(this.getAttribute('href'));
-    //         if(targetSection) {
-    //             targetSection.scrollIntoView({ 
-    //                 behavior: 'smooth' 
-    //             });
-    //         }
-    //     });
-    // });
+       
     let sleepCyclesData = <?php echo json_encode($sleepCycles); ?>;
   
 
@@ -517,7 +493,7 @@ function updateSleepWidget(sleepData) {
     return hours + (minutes / 60);
 }
 
-// Let's say PHP echoes the string directly into JavaScript
+
 const sleepDurationString = "<?php echo getSleepTimeAverage(); ?>"; // "9hrs 35mins"
 const sleepDurationData = convertTimeToDecimal(sleepDurationString.replace('hrs', '').replace('mins', ''));
 
@@ -583,7 +559,11 @@ const sleepDurationChart = new Chart(ctx, {
     const feedbackElement = document.getElementById('sleepTimeFeedback');
     let message = '';
 
-    if (averageSleepHours >= 8) {
+    if (!sleepScore || sleepScore === 0) {
+        // Message to prompt the user to start tracking their sleep
+        message = `<h2>Welcome to Sleep.io</h2>
+        <p>Please begin your sleep journey by entering your sleep data.</p>`;
+      } else if (averageSleepHours >= 8) {
         message = `Fantastic! You're averaging <strong>more than the recommended 8 hours</strong> of sleep, which is excellent for your health and well-being. Your current sleep score is <strong>${sleepScore}</strong>, indicating you're doing great. You've maintained a sleep streak of <strong>${sleepStreak} days</strong>, showing commendable consistency. Keep up the great work!
 
         <p>Remember, quality is just as important as quantity. Your last sleep duration was <strong>${lastSleepDuration}</strong>, and you typically wake up around <strong>${wakeTime}</strong>. To further improve your sleep quality:</p>
@@ -613,7 +593,7 @@ const sleepDurationChart = new Chart(ctx, {
 
 updateSleepTimeFeedback(sleepDurationData);
 
-// If using window.addEventListener, ensure it's correctly structured
+
 window.addEventListener('load', () => {
     updateSleepTimeFeedback(sleepDurationData);
 });

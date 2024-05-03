@@ -2,9 +2,9 @@
 
 <?php
 
-// Assuming you have the user's ID stored in a session or a variable.
-// Replace with the actual user's ID retrieval method
-$userId = $_SESSION['user_id'] ?? 25; // Example user_id set to 25 for demonstration
+
+
+$userId = $_SESSION['user_id'] ?? 25; 
 
 // Query to fetch sleep data for the specific user
 $query = "SELECT date_of_sleep, sleep_time, wake_time, sleep_duration, sleep_quality, comments FROM sleep_tracker WHERE user_id = ? ORDER BY date_of_sleep DESC";
@@ -64,7 +64,7 @@ $conn->close();
     <!-- Fixed navigation bar  -->
     <?php include 'includes/nav.php'; ?>
 
-    <!-- Content section for sleep history and trends -->
+    
 
 
 
@@ -155,12 +155,12 @@ $conn->close();
 </body>
 <script>
 
-    // Sample Data for Charts and Table
+ 
 // Use the PHP variable to initialize the sleep data in JavaScript
 const sleepData = <?php echo $sleepDataJson; ?>;
 
 
-// Populate Sleep History Table
+
 // Populate Sleep History Table
 function populateTable() {
     const tableBody = document.querySelector('tbody');
@@ -296,7 +296,7 @@ function updateSleepQualityChart(selectedQuality) {
                     label: selectedQuality + ' Quality Percentage',
                     data: [qualityPercentages[selectedQuality] || 0],
                     backgroundColor: 'blue',
-                    // ... other bar chart configurations
+                    
                 }]
             },
             options: {

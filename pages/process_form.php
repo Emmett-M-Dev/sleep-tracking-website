@@ -12,8 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sleepQuality = filter_input(INPUT_POST, 'sleepQuality', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $comments = filter_input(INPUT_POST, 'comments', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-    // Assuming $userId is retrieved from session or another source
-   // Replace 0 with a failure or redirect condition
+    
+   
 
     // Validate input (basic example, expand according to your needs)
     if (empty($dateOfSleep) || empty($sleepTime) || empty($wakeTime) || empty($sleepQuality)) {

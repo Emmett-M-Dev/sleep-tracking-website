@@ -68,14 +68,18 @@ function calculateSleepScore() {
             $sleepScore = min($sleepScore, $baseScoreRange[1]); // Ensure it doesn't exceed the maximum
         }
 
+        // Round up the score to the nearest integer
+        $sleepScore = ceil($sleepScore);
+
+
     } else {
         // Handle the case when there's no sleep data
-        $sleepScore = "No sleep data available";
+        $sleepScore = 0;
     }
 
     $stmt->close();
 
-    return round($sleepScore);
+    return $sleepScore;
 }
 // 
 function getLastSleepDuration() {
@@ -97,7 +101,7 @@ function getLastSleepDuration() {
         $sleepDuration = $row['sleep_duration'];
     } else {
         // Handle the case when there's no sleep data
-        $sleepDuration = "No sleep data available";
+        $sleepDuration = " --:--";
     }
 
     $stmt->close();
@@ -121,7 +125,7 @@ function getLatestWakeTime() {
         $wakeTime = $row['wake_time'];
     } else {
         // Handle the case when there's no sleep data
-        $wakeTime = "No wake time data available";
+        $wakeTime = "--:--";
     }
 
     $stmt->close();

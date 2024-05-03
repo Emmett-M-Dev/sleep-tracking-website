@@ -24,10 +24,10 @@
         
         /* Add styles for your content and sections here */
         .section {
-            /* Your section styles, for example: */
-            position: relative; /* Ensures content is positioned over the background */
+           
+            position: relative; /* content is positioned over the background */
             z-index: 1; /* Higher than the default z-index of 0 */
-            /* Other styles such as padding, margin, etc. */
+            
         }
     </style>
 </head>
@@ -38,7 +38,7 @@
 
     <!-- Introduction section -->
     <section class="h-screen w-screen relative">
-    <!-- <img src="includes/images/MoonSkyBackground.webp" class="absolute top-0 left-0 w-full h-full object-cover" alt="Moon"> -->
+    
     <div class="absolute inset-0 bg-black bg-opacity-50">
         <div class="flex justify-center items-center h-full">
             <div class="text-center">
@@ -103,8 +103,6 @@
         <i class="fas fa-book-open fa-3x text-white mb-2"></i>
         <p class="text-white text-lg">tracker</p>
 </a>
-   
-
 
     <!-- Icon 3 -->
     <a href="profile.php" class="icon-container flex flex-col justify-center items-center p-4 rounded-lg bg-gradient-to-r from-blue-500 to-teal-400" href="#">
@@ -121,9 +119,9 @@
         <i class="fas fa-screwdriver-wrench fa-3x text-white mb-2"></i>
         <p class="text-white text-lg">other</p>
 </a>
-    <!-- Additional icons... -->
+   
 </div>
-<!-- Featured Courses Section -->
+
 
         
 

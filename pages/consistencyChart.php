@@ -3,6 +3,8 @@
 
 $userId = $_SESSION['user_id'] ?? exit('User is not logged in.'); // Ensure user is logged in.
 
+
+
 // Query to fetch sleep data for the specific user, ordered by date
 $query = "SELECT date_of_sleep, sleep_time FROM sleep_tracker WHERE user_id = ? ORDER BY date_of_sleep ASC";
 $stmt = $conn->prepare($query);
@@ -20,6 +22,8 @@ while ($row = $result->fetch_assoc()) {
         'sleepTime' => $timeAsDecimal
     ];
 }
+
+
 
 // Calculate the average sleep time
 $averageSleepTime = array_sum(array_column($sleepData, 'sleepTime')) / count($sleepData);
@@ -55,8 +59,8 @@ $sumOfSquares = array_reduce($adjustedSleepTimes, function($carry, $time) use ($
 $stdDeviation = sqrt($sumOfSquares / count($adjustedSleepTimes));
 
 // Define the maximum standard deviation that corresponds to a score of 0
-// Assuming 1 hour of deviation is the maximum allowed for a zero score
-$maxStdDevForZeroScore = 2.5; // 1 hour, adjust as needed
+// 2.5 hour of deviation is the maximum allowed for a zero score
+$maxStdDevForZeroScore = 2.5; 
 
 // Calculate the consistency score as an inverse of the standard deviation, scaled to a maximum of 100
 $consistencyScore = max(0, 100 - ($stdDeviation / $maxStdDevForZeroScore * 100));
@@ -77,20 +81,20 @@ $consistencyScore = number_format($consistencyScore, 2);
     <style>
         /* Set maximum width for the chart container */
         .chart-container {
-            max-width: 1000px; /* Adjust as needed */
+            max-width: 1000px; 
             max-height: 700px;
             margin: auto;
         }
         /* Responsive canvas size */
         canvas {
             width: 100% !important;
-            max-width: 1000px; /* Adjust as needed */
+            max-width: 1000px; 
             max-height: 1000px !important;
         }
     </style>
 </head>
 <body class="bg-blue-900 text-white font-sans">
-    <!-- Your navigation bar here -->
+    
 
     <!-- Container for the Sleep Consistency Graph -->
     <div class="chart-container my-12 p-8">
@@ -109,6 +113,9 @@ $consistencyScore = number_format($consistencyScore, 2);
     </div>
 
     <script>
+
+        
+
         // Function to initialize the Sleep Consistency Graph
         function initializeSleepConsistencyGraph() {
     const ctx = document.getElementById('sleepConsistencyChart').getContext('2d');
@@ -187,7 +194,7 @@ $consistencyScore = number_format($consistencyScore, 2);
                     display: true
                 },
                 tooltip: {
-                    // Tooltip configuration here, as previously given
+                    
                 }
             }
         }

@@ -20,6 +20,7 @@ $labels = [
 ];
 
 
+
 ?>
 
 <!DOCTYPE html>
@@ -30,25 +31,35 @@ $labels = [
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
    .chart-label {
-    color: white; /* Set the text color */
-    text-align: center; /* Center the text below the donut chart */
-    margin-top: 5px; /* Add some space between the chart and the label */
-    font-size: 16px; /* Set the font size for the label */
-    font-weight: bold; /* Optional: make the label text bold */
+    color: white; 
+    text-align: center; 
+    margin-top: 5px; 
+    font-size: 16px; 
+    font-weight: bold; 
 }
     </style>
 </head>
 <body>
 
 
-<!-- Assuming you already loaded Chart.js in the head of your tracker.php -->
+
 <div class="progress-circles-container">
-    <?php foreach ($stagePercentages as $stage => $percentage): ?>
-        <div class="percentage-chart-container">
-            <canvas id="progress<?= htmlspecialchars($stage) ?>"></canvas>
-            <figcaption class="chart-label"><?= $labels[$stage] ?></figcaption>
-        </div>
-    <?php endforeach; ?>
+<?php 
+// Check if there's sleep data available
+if (!empty($stagePercentages)) {
+    // If sleep data is available, proceed with displaying the progress bars
+    foreach ($stagePercentages as $stage => $percentage) {
+        echo "<div class=\"percentage-chart-container\">";
+        echo "<canvas id=\"progress" . htmlspecialchars($stage) . "\"></canvas>";
+        echo "<figcaption class=\"chart-label\">" . $labels[$stage] . "</figcaption>";
+        echo "</div>";
+    }
+} else {
+    // If no sleep data is available, display a message instead
+    echo "<p>No sleep data available. Please begin your sleep journey by entering your sleep data.</p>";
+}
+
+?>
 </div>
 
 <script>
@@ -71,7 +82,7 @@ $labels = [
         options: {
             rotation: Math.PI,
             circumference: 115 * Math.PI,
-            cutout: '60%', // Adjust this for a thicker/thinner ring
+            cutout: '60%', 
             responsive: false,
             maintainAspectRatio: false,
             tooltips: {enabled: false},

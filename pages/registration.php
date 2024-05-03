@@ -5,27 +5,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
     $db_username = "root";
     $db_password = "";
     $db_name = "emurray46";
+
+    // Create connection
     $conn = new mysqli($servername, $db_username, $db_password, $db_name);
 
+    // Check connection
     if ($conn->connect_error) {
-        echo "Connection failed: " . $conn->connect_error;
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+    // Trim to remove whitespace and escape to prevent SQL injection
+    $username = trim($conn->real_escape_string($_POST['username']));
+    $email = trim($conn->real_escape_string($_POST['email']));
+    $password = trim($conn->real_escape_string($_POST['password']));
+
+    // Check for empty fields
+    if (empty($username) || empty($email) || empty($password)) {
+        $errorMsg = "All fields are required.";
     } else {
-        $username = $_POST['username'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        // Check if username or email already exists
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username=? OR email=?");
+        $stmt->bind_param("ss", $username, $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $stmt->close(); // Close this statement as soon as we're done with it
 
-        $sql = "INSERT INTO users (username, email, password) VALUES ('$username', '$email', '$password')";
-
-        if ($conn->query($sql) === TRUE) {
-            header("Location: login.php");
-            exit();
+        if ($result->num_rows > 0) {
+            $errorMsg = "Username or Email already exists.";
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            // Insert new user
+            
+            $insert_stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+            $insert_stmt->bind_param("sss", $username, $email, $password);
+            if ($insert_stmt->execute()) {
+                header("Location: login.php");
+                exit();
+            } else {
+                $errorMsg = "Error: " . $insert_stmt->error;
+            }
+            $insert_stmt->close(); // Close this statement only if it's been initialized
         }
-
-        $conn->close();
     }
+    $conn->close();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -34,8 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Page</title>
-   <!--- <link rel="stylesheet" href="styles.css" type="text/css"> -->
-    <!---<script src="Scripts.js"></script>-->
+   
 
 
     <!-- Include Tailwind CSS from CDN -->
@@ -62,13 +84,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
             background-size: cover; /* Covers the entire viewport */
             
         }
+        .error-msg {
+            color: red;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
     </style>
 
 </head>
 <body class="bg-purple-900">
 <div class="container mx-auto mt-8 p-4">
         <div class="bg-navy-900 text-white p-8 rounded-lg shadow-xl max-w-md mx-auto">
+        
             <h2 class="text-2xl mb-4">Registration</h2>
+            <?php if (!empty($errorMsg)): ?>
+                <div class="error-msg">
+                    <?= htmlspecialchars($errorMsg) ?>
+                </div>
+            <?php endif; ?>
             <form method="post" action="" class="space-y-4">
                 <div class="input-group">
                     <label for="username">Username:</label>

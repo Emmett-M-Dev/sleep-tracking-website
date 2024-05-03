@@ -2,7 +2,7 @@
        .nav {
       position: fixed; /* Changed from absolute to fixed for full-width nav bar */
       top: 0;
-      left: 0; /* Added for full-width nav bar */
+      left: 0; /*  full-width nav bar */
       right: 0;
       padding: 1rem;
       width: 100%; /* Ensure the nav is full width */

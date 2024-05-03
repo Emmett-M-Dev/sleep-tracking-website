@@ -56,7 +56,7 @@
     color: #ffc107; /* Highlight color remains the same */
 }
 
-/* ... (other CSS remains unchanged) ... */
+
 
 
 
@@ -113,12 +113,12 @@
 
         <section id="previousEntries">
             <h2>Previous Entries</h2>
-            <!-- Pagination and entries will be handled here -->
+            
         </section>
 
         <section id="recommendedReadings">
             <h2>Recommended Readings</h2>
-            <!-- Categorized readings will be here -->
+            
         </section>
     <script src="script.js">
 
@@ -169,7 +169,7 @@ function filterDreamEntries(searchText) {
 }
 
 function displayDreamEntries(entries) {
-    entriesContainer.innerHTML = ''; // Clear existing entries
+    entriesContainer.innerHTML = ''; // Clear existing entry
     entries.forEach(entry => {
         const p = document.createElement('p');
         p.textContent = entry;
@@ -177,17 +177,17 @@ function displayDreamEntries(entries) {
     });
 }
 
-// Mock data for previous entries
+// Mock data 
 const previousEntries = [
     "I was flying over the mountains...",
     "I found a hidden door in my house...",
-    // Add more static entries for demonstration
+    
 ];
 
 const recommendedReadings = [
     { title: "Understanding Dreams", url: "https://example.com/dreams1" },
     { title: "The World of Dreams", url: "https://example.com/dreams2" },
-    // Add more links for demonstration
+    
 ];
 
 // Populate previous entries

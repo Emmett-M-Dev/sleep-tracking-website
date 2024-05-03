@@ -208,15 +208,7 @@ mysqli_close($conn);
             background-color: #5B21B6; /* Tailwind purple-700 for hover effect */
         }
 
-/* Style for the close button */
-/* .close-button {
-    cursor: pointer;
-    margin-top: 10px;
-    padding: 5px 10px;
-    background-color: #ccc;
-    border: none;
-    border-radius: 5px;
-} */
+
 
     </style>
 </head>
@@ -292,11 +284,7 @@ mysqli_close($conn);
                 // Submit the form
                 form.submit();
     
-            // Add your session finishing logic here (e.g., updating session status)
-            // ...
-
-            // you can make an AJAX request to update the session status
-            // Replace the following example with your actual session finishing logic
+           
         fetch('finish_session.php', {
             method: 'POST',
             body: JSON.stringify({ user_id: <?php echo $user_id; ?> }),
@@ -316,7 +304,7 @@ mysqli_close($conn);
             .catch(error => {
             console.error('Error:', error);
 
-            // Handle errors as needed
+            // Handle errors 
         });
         }
     }

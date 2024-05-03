@@ -1,24 +1,6 @@
 
 
-<?php
-// Include the PHP file that defines getLatestSleepData() and calculateSleepStages()
-//include 'chartSleepData.php';
 
-// Assuming session start and database connection setup is handled in sessionconnection.php
-//include 'sessionconnection.php';
-
-// Fetch the sleep data for the currently logged-in user
-//$sleepData = getLatestSleepData();
-
-// if ($sleepData) {
-//     $sleepCycles = calculateSleepStages($sleepData['sleep_time'], $sleepData['wake_time']);
-// } else {
-//     // Handle the case when there's no sleep data for the user
-//     // For the sake of the D3 chart, we might set some default or empty values here
-//     $sleepData = ['sleep_time' => '00:00:00', 'wake_time' => '00:00:00']; // default times
-//     $sleepCycles = []; // empty array
-// }
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -28,22 +10,7 @@
     <!-- <script src="https://d3js.org/d3.v7.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <style>
-     /* .chart-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 500px; 
-        background-color: #131862; 
-    }
     
-    #sleepCycleChart {
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); 
-        border-radius: 8px; 
-        max-width: 600px; 
-        width: 100%; 
-    } */
-</style>
 </head>
 <body>
 
@@ -200,17 +167,14 @@
                 },
                 
                 legend: {
-                    display: false // No legend needed
+                    display: false 
                 }
             }
         }
     });
 
     const dataPoint = chart.data.datasets[datasetIndex].data[index];
-// Assuming dataPoint.y contains 'N1', 'REM', etc.
-// if (dataPoint.y === 'N1') {
-//     updateAndDisplayInfo('N1: Light Sleep', 'Description of N1 stage...');
-// }
+
 function updateAndDisplayInfo(title, description) {
     console.log("updateAndDisplayInfo called with:", title, description);
   const infoBox = document.getElementById('sleepStageInfo');
