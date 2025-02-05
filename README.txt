@@ -18,3 +18,6 @@ How to use and run Sleep.io
 5. Run Project locally 
  - use this link: http://localhost/sleep-tracking-website/pages/registration.php
  - this will be the first page to register and enter.
+ALSO***
+Checkout my dissertation discussing the project fully it is in the main files called - EmmettMurray_SleepTrackingWesbite_dissertation
+thank you!
